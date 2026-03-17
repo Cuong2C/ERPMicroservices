@@ -11,5 +11,6 @@ public class Item : AuditableEntity
     public string Description { get; set; } = default!;
     public string ImageUrl { get; set; } = default!;
     public Guid TaxCodeId { get; set; }
+    public string Barcode {  get; set; } = default!;
     public List<Tag> Tags { get; set; } = new();
 }
