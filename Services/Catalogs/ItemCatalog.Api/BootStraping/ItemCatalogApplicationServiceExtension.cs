@@ -14,8 +14,11 @@ public static class ItemCatalogApplicationServiceExtension
         services.AddSerilog();
 
         var connectionString = configuration.GetConnectionString("Database");
+
         services.AddDbContext<ItemCatalogDbContext>(options =>
             options.UseNpgsql(connectionString));
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
         return services;
     }
