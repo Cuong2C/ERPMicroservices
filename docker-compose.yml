@@ -1,0 +1,9 @@
+services:
+  itemcatalogdb:
+    image: postgres
+
+  itemcatalog.api:
+    image: ${DOCKER_REGISTRY-}itemcatalogapi
+    build:
+      context: .
+      dockerfile: Services/Catalogs/ItemCatalog.Api/Dockerfile
