@@ -1,16 +1,12 @@
-﻿using Mapster;
-using MediatR;
-
-namespace ItemCatalog.Api.Items.CreateItem;
+﻿namespace ItemCatalog.Api.Items.CreateItem;
 
 public record CreateItemRequest(
     string Name,
-    string BaseUnit,
+    Guid BaseUnitId,
     List<Guid> CategoryIds,
     string Description,
     string ImageUrl,
     Guid TaxCodeId,
-    string Barcode,
     List<Guid> TagIds
 );
 

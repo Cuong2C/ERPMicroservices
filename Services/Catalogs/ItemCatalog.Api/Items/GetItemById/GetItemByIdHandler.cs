@@ -10,12 +10,11 @@ public record GetItemByIdQuery(Guid Id) : IRequest<GetItemByIdResult>;
 public record GetItemByIdResult(
     Guid Id,
     string Name,
-    string BaseUnit,
+    Guid BaseUnitId,
     List<Category> Categories,
     string Description,
     string ImageUrl,
     Guid TaxCodeId,
-    string Barcode,
     List<Tag> Tags,
     DateTime CreatedDate,
     string CreatedBy,
@@ -27,7 +26,7 @@ internal class GetItemByIdHandler(ItemCatalogDbContext context) : IRequestHandle
     public async Task<GetItemByIdResult> Handle(GetItemByIdQuery request, CancellationToken cancellationToken)
     {
         var item = await context.Items
-            .Include(i => i.Categories)
+            .Include(i => i.ItemCategories)
             .Include(i => i.Tags)
             .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 

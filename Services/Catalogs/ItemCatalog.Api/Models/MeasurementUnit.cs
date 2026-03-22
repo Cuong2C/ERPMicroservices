@@ -2,9 +2,9 @@
 
 namespace ItemCatalog.Api.Models;
 
-public class Category : AuditableEntity
+public class MeasurementUnit : AuditableEntity
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
-    public ICollection<ItemCategory> ItemCategories { get; set; } = new List<ItemCategory>();
+    public ICollection<ItemUnit> ItemUnits { get; set; } = new List<ItemUnit>();
 }

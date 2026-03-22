@@ -1,14 +1,15 @@
 services:
   itemcatalogdb:
-      container_name: itemcatalogdb
-      environment:
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
-        - POSTGRES_DB=ItemCatalogDb
-      ports:
-        - "5433:5432"
-      volumes:
-        - itemcatalogdb_data:/var/lib/postgresql
+    container_name: itemcatalogdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=ItemCatalogDb
+    ports:
+      - "5433:5432"
+    volumes:
+      - itemcatalogdb_data:/var/lib/postgresql
+
   itemcatalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

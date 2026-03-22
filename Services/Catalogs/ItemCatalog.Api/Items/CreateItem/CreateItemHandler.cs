@@ -1,4 +1,4 @@
-﻿using ItemCatalog.Api.Data;
+﻿
 using ItemCatalog.Api.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -7,12 +7,11 @@ namespace ItemCatalog.Api.Items.CreateItem;
 
 public record CreateItemCommand(
     string Name,
-    string BaseUnit,
+    Guid BaseUnitId,
     List<Guid> CategoryIds,
     string Description,
     string ImageUrl,
     Guid TaxCodeId,
-    string Barcode,
     List<Guid> TagIds
 ) : IRequest<CreateItemResult>;
 
@@ -27,14 +26,13 @@ internal class CreateItemHandler(ItemCatalogDbContext context) : IRequestHandler
         {
             Id = Guid.NewGuid(),
             Name = command.Name,
-            BaseUnit = command.BaseUnit,
+            BaseUnitId = command.BaseUnitId,
             Description = command.Description,
             ImageUrl = command.ImageUrl,
             TaxCodeId = command.TaxCodeId,
-            Barcode = command.Barcode
         };
 
-        item.Categories = await context.Categories.Where(c => command.CategoryIds.Contains(c.Id)).ToListAsync(cancellationToken);
+        item.ItemCategories = await context.ItemCategories.Where(c => command.CategoryIds.Contains(c.CategoryId)).ToListAsync(cancellationToken);
         item.Tags = await context.Tags.Where(t => command.TagIds.Contains(t.Id)).ToListAsync(cancellationToken);
 
         // save item

@@ -7,12 +7,11 @@ namespace ItemCatalog.Api.Items.GetItemById;
 public record GetItemByIdResponse(
     Guid Id,
     string Name,
-    string BaseUnit,
+    Guid BaseUnitId,
     List<Category> Categories,
     string Description,
     string ImageUrl,
     Guid TaxCodeId,
-    string Barcode,
     List<Tag> Tags,
     DateTime CreatedDate,
     string CreatedBy,
