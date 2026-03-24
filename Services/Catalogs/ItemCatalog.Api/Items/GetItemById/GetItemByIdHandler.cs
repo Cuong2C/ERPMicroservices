@@ -14,7 +14,7 @@ public record GetItemByIdResult(
     List<Category> Categories,
     string Description,
     string ImageUrl,
-    Guid TaxCodeId,
+    Guid TaxId,
     List<Tag> Tags,
     DateTime CreatedDate,
     string CreatedBy,

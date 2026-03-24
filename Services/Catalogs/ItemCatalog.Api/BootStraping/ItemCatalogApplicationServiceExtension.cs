@@ -1,6 +1,4 @@
-﻿using ItemCatalog.Api.Data;
-using Microsoft.EntityFrameworkCore;
-using Serilog;
+﻿using Serilog;
 
 namespace ItemCatalog.Api.BootStraping;
 

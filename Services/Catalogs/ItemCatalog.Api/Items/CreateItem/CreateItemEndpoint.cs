@@ -3,11 +3,17 @@
 public record CreateItemRequest(
     string Name,
     Guid BaseUnitId,
+    List<ItemUnitDto> Units,
     List<Guid> CategoryIds,
     string Description,
     string ImageUrl,
-    Guid TaxCodeId,
+    Guid TaxId,
     List<Guid> TagIds
+);
+
+public record ItemUnitDto(
+    Guid UnitId,
+    decimal ConversionRate
 );
 
 public record CreateItemResponse(Guid Id);

@@ -11,6 +11,6 @@ public class Item : AuditableEntity
     public ICollection<ItemCategory> ItemCategories { get; set; } = new List<ItemCategory>();
     public string Description { get; set; } = default!;
     public string ImageUrl { get; set; } = default!;
-    public Guid TaxCodeId { get; set; }
+    public Guid TaxId { get; set; }
     public List<Tag> Tags { get; set; } = new();
 }
