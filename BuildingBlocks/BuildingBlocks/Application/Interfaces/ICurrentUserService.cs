@@ -1,4 +1,4 @@
-﻿namespace BuildingBlocks.Domain.Interfaces;
+﻿namespace BuildingBlocks.Application.Interfaces;
 
 public interface ICurrentUserService
 {

@@ -1,9 +1,9 @@
-﻿using BuildingBlocks.Domain.Interfaces;
+﻿using BuildingBlocks.Application.Interfaces;
+using BuildingBlocks.Domain;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace BuildingBlocks.Domain;
+namespace BuildingBlocks.Infrastructure;
 
 public class AuditableEntityInterceptor(ICurrentUserService currentUserService) : SaveChangesInterceptor
 {

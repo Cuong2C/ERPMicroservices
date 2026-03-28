@@ -22,6 +22,7 @@ public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
         RuleFor(x => x.Code).NotEmpty().MaximumLength(50).WithMessage("Item code is required");
         RuleFor(x => x.Name).NotEmpty().MaximumLength(200).WithMessage("Item name is require");
         RuleFor(x => x.BaseUnitId).NotEmpty().WithMessage("Base unit is required");
+        RuleFor(x => x.TaxId).NotEmpty().WithMessage("Tax is required");
     }
 }
 

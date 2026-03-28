@@ -1,4 +1,6 @@
-﻿using Serilog;
+﻿using BuildingBlocks.Application.Interfaces;
+using ItemCatalog.Api.Services;
+using Serilog;
 
 namespace ItemCatalog.Api.BootStraping;
 
@@ -16,7 +18,11 @@ public static class ItemCatalogApplicationServiceExtension
         services.AddDbContext<ItemCatalogDbContext>(options =>
             options.UseNpgsql(connectionString));
 
+
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         return services;
     }
