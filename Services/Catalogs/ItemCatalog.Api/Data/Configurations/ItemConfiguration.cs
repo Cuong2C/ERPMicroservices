@@ -5,6 +5,7 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
     public void Configure(EntityTypeBuilder<Item> builder)
     {
         builder.HasKey(i => i.Id);
+        builder.HasIndex(i => i.Code).IsUnique();
         builder.Property(i => i.Name).IsRequired().HasMaxLength(200);
         builder.Property(i => i.BaseUnitId).IsRequired();
         builder.Property(i => i.Description).HasMaxLength(1000);

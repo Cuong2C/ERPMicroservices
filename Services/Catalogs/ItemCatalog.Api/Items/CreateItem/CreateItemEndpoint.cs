@@ -1,12 +1,14 @@
 ﻿namespace ItemCatalog.Api.Items.CreateItem;
 
 public record CreateItemRequest(
+    string Code,
     string Name,
     Guid BaseUnitId,
     List<ItemUnitDto> Units,
     List<Guid> CategoryIds,
     string Description,
     string ImageUrl,
+    decimal MinStockQuantity,
     Guid TaxId,
     List<Guid> TagIds
 );

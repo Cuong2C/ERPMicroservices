@@ -9,6 +9,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     public void Configure(EntityTypeBuilder<Category> builder)
     {
         builder.HasKey(c => c.Id);
+        builder.HasIndex(c => c.Code).IsUnique();
         builder.Property(c => c.Name).IsRequired().HasMaxLength(200);
         builder.HasMany(c => c.ItemCategories).WithOne(ic => ic.Category).HasForeignKey(ic => ic.CategoryId);
     }

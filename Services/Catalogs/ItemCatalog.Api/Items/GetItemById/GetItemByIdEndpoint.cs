@@ -13,10 +13,12 @@ public record GetItemByIdResponse(
     string ImageUrl,
     Guid TaxId,
     List<Tag> Tags,
-    DateTime CreatedDate,
+    Status Status,
+    decimal MinStockQuantity,
+    DateTime CreatedAt,
     string CreatedBy,
-    DateTime ModifiedDate,
-    string ModifiedBy
+    DateTime ModifiedAt,
+    string LastModifiedBy
 );
 
 public static class GetItemByIdEndpoint 

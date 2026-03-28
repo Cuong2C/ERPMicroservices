@@ -1,6 +1,7 @@
 ﻿namespace ItemCatalog.Api.Items.CreateItem;
 
 public record CreateItemCommand(
+    string Code,
     string Name,
     Guid BaseUnitId,
     List<ItemUnitDto> Units,
@@ -8,6 +9,7 @@ public record CreateItemCommand(
     string Description,
     string ImageUrl,
     Guid TaxId,
+    decimal MinStockQuantity,
     List<Guid> TagIds
 ) : IRequest<CreateItemResult>;
 
@@ -17,11 +19,9 @@ public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
 {
     public CreateItemCommandValidator()
     {
-        RuleFor(x => x.Name).NotEmpty().MaximumLength(200);
-        RuleFor(x => x.BaseUnitId).NotEmpty();
-        RuleFor(x => x.Description).MaximumLength(1000);
-        RuleFor(x => x.ImageUrl).MaximumLength(100);
-        RuleFor(x => x.TaxId).NotEmpty();
+        RuleFor(x => x.Code).NotEmpty().MaximumLength(50).WithMessage("Item code is required");
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(200).WithMessage("Item name is require");
+        RuleFor(x => x.BaseUnitId).NotEmpty().WithMessage("Base unit is required");
     }
 }
 
@@ -33,13 +33,17 @@ internal class CreateItemHandler(ItemCatalogDbContext context) : IRequestHandler
         var item = new Item
         {
             Id = Guid.NewGuid(),
+            Code = command.Code,
             Name = command.Name,
             BaseUnitId = command.BaseUnitId,
             Description = command.Description,
             ImageUrl = command.ImageUrl,
             TaxId = command.TaxId,
+            Status = Status.Active,
+            MinStockQuantity = command.MinStockQuantity
         };
 
+        // validate categories
         var categories = await context.Categories.Where(c => command.CategoryIds.Contains(c.Id)).ToListAsync(cancellationToken);
 
         if(categories.Count != command.CategoryIds.Count)
@@ -49,8 +53,28 @@ internal class CreateItemHandler(ItemCatalogDbContext context) : IRequestHandler
 
         item.ItemCategories = categories.Select(c => new ItemCategory { ItemId = item.Id, CategoryId = c.Id }).ToList();
 
-        
+        // validate units
+        var unitIds = command.Units.Select(u => u.UnitId).ToList();
 
+        // Ensure base unit is included in the units list
+        if (!unitIds.Contains(command.BaseUnitId))
+        {
+            unitIds.Add(command.BaseUnitId);
+        }
+
+        var unitsInDb = await context.Units.Where(u => unitIds.Contains(u.Id)).ToListAsync(cancellationToken);
+
+        if(unitsInDb.Count != command.Units.Count)
+        {
+            throw new Exception("One or more units not found.");
+        }
+
+        item.ItemUnits = command.Units.Select(u => new ItemUnit
+        {
+            ItemId = item.Id,
+            UnitId = u.UnitId,
+            ConversionRate = u.ConversionRate
+        }).ToList();
 
         item.Tags = await context.Tags.Where(t => command.TagIds.Contains(t.Id)).ToListAsync(cancellationToken);
 
