@@ -1,6 +1,4 @@
-﻿using ItemCatalog.Api.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace ItemCatalog.Api.Data;
 

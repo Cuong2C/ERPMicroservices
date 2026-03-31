@@ -1,14 +1,12 @@
-﻿using ItemCatalog.Api.Models;
-using Mapster;
-using MediatR;
-
-namespace ItemCatalog.Api.Items.GetItemById;
+﻿namespace ItemCatalog.Api.Items.GetItemById;
 
 public record GetItemByIdResponse(
     Guid Id,
+    string Code,
     string Name,
     Guid BaseUnitId,
-    List<Category> Categories,
+    List<ItemUnit> ItemUnits,
+    List<ItemCategory> ItemCategories,
     string Description,
     string ImageUrl,
     Guid TaxId,
@@ -17,7 +15,7 @@ public record GetItemByIdResponse(
     decimal MinStockQuantity,
     DateTime CreatedAt,
     string CreatedBy,
-    DateTime ModifiedAt,
+    DateTime LastModifiedAt,
     string LastModifiedBy
 );
 
@@ -28,11 +26,14 @@ public static class GetItemByIdEndpoint
         endpoints.MapGet("/items/{id:guid}", async (Guid id, ISender sender) =>
         {
             var query = new GetItemByIdQuery(id);
-            var result = await sender.Send(query);
+            var handlerResult = await sender.Send(query);
 
-            var response = result.Adapt<GetItemByIdResponse>();
+            var responseData = handlerResult.Adapt<GetItemByIdResponse>();
+
+            var response = Result<GetItemByIdResponse>.Success(responseData);
             return Results.Ok(response);
         });
+
         return endpoints;
     }
 }

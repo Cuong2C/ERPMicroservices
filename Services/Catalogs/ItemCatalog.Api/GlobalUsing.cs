@@ -1,8 +1,9 @@
-﻿global using ItemCatalog.Api.Data;
+﻿global using BuildingBlocks.Application.Results;
+global using FluentValidation;
+global using ItemCatalog.Api.Data;
+global using ItemCatalog.Api.Enums;
 global using ItemCatalog.Api.Models;
 global using Mapster;
 global using MediatR;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
-global using FluentValidation;
-global using ItemCatalog.Api.Enums;

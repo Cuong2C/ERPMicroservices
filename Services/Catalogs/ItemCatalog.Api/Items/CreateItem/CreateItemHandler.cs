@@ -33,7 +33,6 @@ internal class CreateItemHandler(ItemCatalogDbContext context) : IRequestHandler
         // create item
         var item = new Item
         {
-            Id = Guid.NewGuid(),
             Code = command.Code,
             Name = command.Name,
             BaseUnitId = command.BaseUnitId,

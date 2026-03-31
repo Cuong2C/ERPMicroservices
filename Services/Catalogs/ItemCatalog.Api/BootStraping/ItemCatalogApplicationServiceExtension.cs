@@ -1,4 +1,6 @@
 ﻿using BuildingBlocks.Application.Interfaces;
+using ItemCatalog.Api.Data.Seed;
+using ItemCatalog.Api.Data.Seed.interfaces;
 using ItemCatalog.Api.Services;
 using Serilog;
 
@@ -23,6 +25,9 @@ public static class ItemCatalogApplicationServiceExtension
 
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<IDataSeeder, UnitSeeder>();
+        services.AddScoped<IDataSeeder, TagSeeder>();
+        services.AddScoped<IDataSeeder, CategorySeeder>();
 
         return services;
     }

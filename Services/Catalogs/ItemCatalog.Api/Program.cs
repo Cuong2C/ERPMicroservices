@@ -8,4 +8,9 @@ var app = builder.Build();
 
 app.UseItemCatalogApplicationServices();
 
+if (builder.Environment.IsDevelopment())
+{
+    await DatabaseInitializerExtension.InitializeAsync(app);
+}
+
 app.Run();

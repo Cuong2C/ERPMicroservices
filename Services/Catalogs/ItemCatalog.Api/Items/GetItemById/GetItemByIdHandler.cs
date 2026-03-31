@@ -1,31 +1,30 @@
-﻿using ItemCatalog.Api.Data;
-using ItemCatalog.Api.Models;
-using Mapster;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-
-namespace ItemCatalog.Api.Items.GetItemById;
+﻿namespace ItemCatalog.Api.Items.GetItemById;
 
 public record GetItemByIdQuery(Guid Id) : IRequest<GetItemByIdResult>;
 public record GetItemByIdResult(
     Guid Id,
+    string Code,
     string Name,
     Guid BaseUnitId,
-    List<Category> Categories,
+    List<ItemUnit> ItemUnits,
+    List<ItemCategory> ItemCategories,
     string Description,
     string ImageUrl,
     Guid TaxId,
+    decimal MinStockQuantity,
+    Status Status,
     List<Tag> Tags,
-    DateTime CreatedDate,
+    DateTime CreatedAt,
     string CreatedBy,
-    DateTime ModifiedDate,
-    string ModifiedBy
+    DateTime LastModifiedAt,
+    string LastModifiedBy
 );
 internal class GetItemByIdHandler(ItemCatalogDbContext context) : IRequestHandler<GetItemByIdQuery, GetItemByIdResult>
 {
     public async Task<GetItemByIdResult> Handle(GetItemByIdQuery request, CancellationToken cancellationToken)
     {
         var item = await context.Items
+            .Include(i => i.ItemUnits)
             .Include(i => i.ItemCategories)
             .Include(i => i.Tags)
             .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);

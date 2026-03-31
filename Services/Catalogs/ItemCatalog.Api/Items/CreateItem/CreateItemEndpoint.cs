@@ -27,10 +27,12 @@ public static class CreateItemEndpoint
         endpoints.MapPost("/items", async (CreateItemRequest request, ISender sender) =>
         {
             var command = request.Adapt<CreateItemCommand>();
-            var result = await sender.Send(command);
-            var reponse = result.Adapt<CreateItemResponse>();
+            var handlerResult = await sender.Send(command);
+            var responseData = handlerResult.Adapt<CreateItemResponse>();
 
-            return Results.Created($"/items/{reponse.Id}", new CreateItemResponse(reponse.Id));
+            var result = Result<CreateItemResponse>.Success(responseData);
+
+            return Results.Created($"/items/{responseData.Id}", result);
         });
 
         return endpoints;
