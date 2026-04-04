@@ -6,14 +6,14 @@ public record GetItemByIdResult(
     string Code,
     string Name,
     Guid BaseUnitId,
-    List<ItemUnit> ItemUnits,
-    List<ItemCategory> ItemCategories,
+    IEnumerable<UnitDto> Units,
+    IEnumerable<CategoryDto> Categories,
     string Description,
     string ImageUrl,
     Guid TaxId,
     decimal MinStockQuantity,
     Status Status,
-    List<Tag> Tags,
+    IEnumerable<TagDto> Tags,
     DateTime CreatedAt,
     string CreatedBy,
     DateTime LastModifiedAt,
@@ -23,18 +23,38 @@ internal class GetItemByIdHandler(ItemCatalogDbContext context) : IRequestHandle
 {
     public async Task<GetItemByIdResult> Handle(GetItemByIdQuery request, CancellationToken cancellationToken)
     {
-        var item = await context.Items
-            .Include(i => i.ItemUnits)
-            .Include(i => i.ItemCategories)
-            .Include(i => i.Tags)
-            .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+        var result = await context.Items
+            .Where(i => i.Id == request.Id)
+            .Select(i => new GetItemByIdResult(
+                i.Id,
+                i.Code,
+                i.Name,
+                i.BaseUnitId,
+                i.ItemUnits.Select(x => new UnitDto(
+                    x.Unit.Id,
+                    x.Unit.Code,
+                    x.Unit.Name,
+                    x.ConversionRate,
+                    x.UnitId == i.BaseUnitId,
+                    x.Barcode)),
+                i.ItemCategories.Select(x => new CategoryDto(x.Category.Id, x.Category.Code, x.Category.Name)),
+                i.Description,
+                i.ImageUrl,
+                i.TaxId,
+                i.MinStockQuantity,
+                i.Status,
+                i.Tags.Select(x => new TagDto(x.Id, x.Code, x.Name)),
+                i.CreatedAt,
+                i.CreatedBy,
+                i.LastModifiedAt,
+                i.LastModifiedBy
+            ))
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (item is null)
+        if (result is null)
         {
             throw new KeyNotFoundException($"Item with Id {request.Id} not found.");
         }
-
-        var result = item.Adapt<GetItemByIdResult>();
 
         return result;
     }

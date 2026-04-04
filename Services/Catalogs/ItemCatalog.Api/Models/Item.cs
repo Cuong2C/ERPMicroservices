@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.Domain;
-using ItemCatalog.Api.Enums;
 
 namespace ItemCatalog.Api.Models;
 
@@ -16,6 +15,6 @@ public class Item : AuditableEntity
     public Guid TaxId { get; set; }
     public Status Status { get; set; } = Status.Active;
     public decimal MinStockQuantity { get; set; }
-    public List<Tag> Tags { get; set; } = new();
+    public ICollection<Tag> Tags { get; set; } = new List<Tag>();
 
 }

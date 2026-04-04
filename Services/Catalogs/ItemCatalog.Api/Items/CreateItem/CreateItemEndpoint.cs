@@ -4,13 +4,13 @@ public record CreateItemRequest(
     string Code,
     string Name,
     Guid BaseUnitId,
-    List<ItemUnitDto> Units,
-    List<Guid> CategoryIds,
+    IEnumerable<ItemUnitDto> Units,
+    IEnumerable<Guid> CategoryIds,
     string Description,
     string ImageUrl,
     decimal MinStockQuantity,
     Guid TaxId,
-    List<Guid> TagIds
+    IEnumerable<Guid> TagIds
 );
 
 public record ItemUnitDto(

@@ -5,18 +5,39 @@ public record GetItemByIdResponse(
     string Code,
     string Name,
     Guid BaseUnitId,
-    List<ItemUnit> ItemUnits,
-    List<ItemCategory> ItemCategories,
+    IEnumerable<UnitDto> Units,
+    IEnumerable<CategoryDto> Categories,
     string Description,
     string ImageUrl,
     Guid TaxId,
-    List<Tag> Tags,
-    Status Status,
     decimal MinStockQuantity,
+    Status Status,
+    IEnumerable<TagDto> Tags,
     DateTime CreatedAt,
     string CreatedBy,
     DateTime LastModifiedAt,
     string LastModifiedBy
+);
+
+public record UnitDto(
+    Guid Id,
+    string Code,
+    string Name,
+    decimal ConversionRate,
+    bool IsBaseUnit,
+    string? Barcode
+);
+
+public record CategoryDto(
+    Guid Id,
+    string Code,
+    string Name
+);
+
+public record TagDto(
+    Guid Id,
+    string Code,
+    string Name
 );
 
 public static class GetItemByIdEndpoint 

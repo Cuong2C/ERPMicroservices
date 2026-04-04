@@ -1,16 +1,18 @@
-﻿namespace ItemCatalog.Api.Items.CreateItem;
+﻿using BuildingBlocks.Exceptions;
+
+namespace ItemCatalog.Api.Items.CreateItem;
 
 public record CreateItemCommand(
     string Code,
     string Name,
     Guid BaseUnitId,
-    List<ItemUnitDto> Units,
-    List<Guid> CategoryIds,
+    IEnumerable<ItemUnitDto> Units,
+    IEnumerable<Guid> CategoryIds,
     string Description,
     string ImageUrl,
     Guid TaxId,
     decimal MinStockQuantity,
-    List<Guid> TagIds
+    IEnumerable<Guid> TagIds
 ) : IRequest<CreateItemResult>;
 
 public record CreateItemResult(Guid Id);
@@ -46,9 +48,9 @@ internal class CreateItemHandler(ItemCatalogDbContext context) : IRequestHandler
         // validate categories
         var categories = await context.Categories.Where(c => command.CategoryIds.Contains(c.Id)).ToListAsync(cancellationToken);
 
-        if(categories.Count != command.CategoryIds.Count)
+        if(categories.Count != command.CategoryIds.Count())
         {
-            throw new Exception("One or more categories not found.");
+            throw new NotFoundException("One or more categories not found.");
         }
 
         item.ItemCategories = categories.Select(c => new ItemCategory { ItemId = item.Id, CategoryId = c.Id }).ToList();
@@ -64,9 +66,9 @@ internal class CreateItemHandler(ItemCatalogDbContext context) : IRequestHandler
 
         var unitsInDb = await context.Units.Where(u => unitIds.Contains(u.Id)).ToListAsync(cancellationToken);
 
-        if(unitsInDb.Count != command.Units.Count)
+        if(unitsInDb.Count != unitIds.Count)
         {
-            throw new Exception("One or more units not found.");
+            throw new NotFoundException("One or more units not found.");
         }
 
         item.ItemUnits = command.Units.Select(u => new ItemUnit
