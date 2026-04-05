@@ -33,7 +33,8 @@ public static class CreateItemEndpoint
             var result = Result<CreateItemResponse>.Success(responseData);
 
             return Results.Created($"/items/{responseData.Id}", result);
-        });
+        })
+            .WithName("CreateItem");
 
         return endpoints;
     }

@@ -53,7 +53,8 @@ public static class GetItemByIdEndpoint
 
             var response = Result<GetItemByIdResponse>.Success(responseData);
             return Results.Ok(response);
-        });
+        })
+        .WithName("GetItemById");
 
         return endpoints;
     }

@@ -1,5 +1,9 @@
 ﻿using ItemCatalog.Api.Items.CreateItem;
+using ItemCatalog.Api.Items.DeleteItem;
+using ItemCatalog.Api.Items.GetDeletedItems;
 using ItemCatalog.Api.Items.GetItemById;
+using ItemCatalog.Api.Items.GetItems;
+using ItemCatalog.Api.Items.UpdateItem;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace ItemCatalog.Api.BootStraping;
@@ -10,6 +14,10 @@ public static class UseApplicationServiceExtension
     {
         app.MapCreateItemEndpoint();
         app.MapGetItemByIdEndpoint();
+        app.MapGetItemsEndpoint();
+        app.MapUpdateItemEndpoint();
+        app.MapDeleteItemEndpoint();
+        app.MapGetDeletedItemsEndpoint();
 
         app.UseExceptionHandler(options =>
         {

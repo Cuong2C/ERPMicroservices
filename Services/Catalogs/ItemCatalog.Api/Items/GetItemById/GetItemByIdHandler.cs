@@ -35,7 +35,7 @@ internal class GetItemByIdHandler(ItemCatalogDbContext context) : IRequestHandle
                     x.Unit.Code,
                     x.Unit.Name,
                     x.ConversionRate,
-                    x.UnitId == i.BaseUnitId,
+                    x.IsBaseUnit,
                     x.Barcode)),
                 i.ItemCategories.Select(x => new CategoryDto(x.Category.Id, x.Category.Code, x.Category.Name)),
                 i.Description,

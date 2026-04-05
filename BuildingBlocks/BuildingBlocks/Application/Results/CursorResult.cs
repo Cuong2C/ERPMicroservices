@@ -7,6 +7,5 @@ public class CursorResult<T> where T : class
     public string? PreviousCursor { get; set; }
     public bool HasNext => !string.IsNullOrEmpty(NextCursor);
     public bool HasPrevious => !string.IsNullOrEmpty(PreviousCursor);
-    public bool Success { get; set; }
     public string? Message { get; set; }
 }
