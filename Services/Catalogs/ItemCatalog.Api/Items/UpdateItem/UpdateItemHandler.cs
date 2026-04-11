@@ -1,3 +1,5 @@
+using ItemCatalog.Api.Services;
+
 namespace ItemCatalog.Api.Items.UpdateItem;
 
 public record UpdateItemCommand(
@@ -29,7 +31,7 @@ public class UpdateItemCommandValidator : AbstractValidator<UpdateItemCommand>
     }
 }
 
-internal class UpdateItemHandler(ItemCatalogDbContext context) : IRequestHandler<UpdateItemCommand, UpdateItemResult>
+internal class UpdateItemHandler(ItemCatalogDbContext context, ITenantGuard tenantGuard) : IRequestHandler<UpdateItemCommand, UpdateItemResult>
 {
     public async Task<UpdateItemResult> Handle(UpdateItemCommand command, CancellationToken cancellationToken)
     {
@@ -41,6 +43,8 @@ internal class UpdateItemHandler(ItemCatalogDbContext context) : IRequestHandler
 
         if (item == null)
             throw new NotFoundException("Item not found.");
+
+        tenantGuard.EnsureCanAccess(item.TenantId);
 
         item.Code = command.Code;
         item.Name = command.Name;

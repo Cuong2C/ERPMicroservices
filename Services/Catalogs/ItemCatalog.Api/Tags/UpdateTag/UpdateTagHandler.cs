@@ -11,12 +11,14 @@ public class UpdateTagCommandValidator : AbstractValidator<UpdateTagCommand>
     }
 }
 
-internal class UpdateTagHandler(ItemCatalogDbContext context) : IRequestHandler<UpdateTagCommand, UpdateTagResult>
+internal class UpdateTagHandler(ItemCatalogDbContext context, ITenantGuard tenantGuard) : IRequestHandler<UpdateTagCommand, UpdateTagResult>
 {
     public async Task<UpdateTagResult> Handle(UpdateTagCommand command, CancellationToken cancellationToken)
     {
         var tag = await context.Tags.FindAsync(new object[] { command.Id }, cancellationToken);
         if (tag == null) throw new NotFoundException("Tag not found.");
+
+        tenantGuard.EnsureCanAccess(tag.TenantId);
 
         tag.Name = command.Name;
 

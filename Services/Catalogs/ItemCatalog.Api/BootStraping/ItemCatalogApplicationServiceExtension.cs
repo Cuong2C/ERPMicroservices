@@ -32,7 +32,8 @@ public static class ItemCatalogApplicationServiceExtension
 
         services.AddHttpContextAccessor();
 
-        services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<ICurrentUser, CurrentUser>();
+        services.AddScoped<ITenantGuard, TenantGuard>();
         services.AddScoped<IDataSeeder, UnitSeeder>();
         services.AddScoped<IDataSeeder, TagSeeder>();
         services.AddScoped<IDataSeeder, CategorySeeder>();

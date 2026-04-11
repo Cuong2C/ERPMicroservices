@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace BuildingBlocks.Infrastructure;
 
-public class AuditableEntityInterceptor(ICurrentUserService currentUserService) : SaveChangesInterceptor
+public class AuditableEntityInterceptor(ICurrentUser currentUserService) : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
@@ -30,6 +30,7 @@ public class AuditableEntityInterceptor(ICurrentUserService currentUserService) 
 
             if (entry.State == EntityState.Added)
             {
+                entry.Entity.TenantId = currentUserService.TenantId;
                 entry.Entity.CreatedBy = userId;
                 entry.Entity.CreatedAt = DateTime.UtcNow;
             }

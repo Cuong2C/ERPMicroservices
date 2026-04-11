@@ -12,12 +12,14 @@ public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCo
     }
 }
 
-internal class UpdateCategoryHandler(ItemCatalogDbContext context) : IRequestHandler<UpdateCategoryCommand, UpdateCategoryResult>
+internal class UpdateCategoryHandler(ItemCatalogDbContext context, ITenantGuard tenantGuard) : IRequestHandler<UpdateCategoryCommand, UpdateCategoryResult>
 {
     public async Task<UpdateCategoryResult> Handle(UpdateCategoryCommand command, CancellationToken cancellationToken)
     {
         var category = await context.Categories.FindAsync(new object[] { command.Id }, cancellationToken);
         if (category == null) throw new NotFoundException("Category not found.");
+
+        tenantGuard.EnsureCanAccess(category.TenantId);
 
         category.Code = command.Code;
         category.Name = command.Name;

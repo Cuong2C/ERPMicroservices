@@ -16,6 +16,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             ValidationException => StatusCodes.Status400BadRequest,
             BadRequestException => StatusCodes.Status400BadRequest,
             NotFoundException => StatusCodes.Status404NotFound,
+            ForbiddenException => StatusCodes.Status403Forbidden,
             _ => StatusCodes.Status500InternalServerError
         };
 

@@ -3,13 +3,15 @@ namespace ItemCatalog.Api.Units.DeleteUnit;
 public record DeleteUnitCommand(Guid Id) : IRequest<DeleteUnitResult>;
 public record DeleteUnitResult(Guid Id);
 
-internal class DeleteUnitHandler(ItemCatalogDbContext context) : IRequestHandler<DeleteUnitCommand, DeleteUnitResult>
+internal class DeleteUnitHandler(ItemCatalogDbContext context, ITenantGuard tenantGuard) : IRequestHandler<DeleteUnitCommand, DeleteUnitResult>
 {
     public async Task<DeleteUnitResult> Handle(DeleteUnitCommand command, CancellationToken cancellationToken)
     {
         var unit = await context.Units.FindAsync(new object[] { command.Id }, cancellationToken);
 
         if (unit == null) throw new NotFoundException("Unit", command.Id);
+
+        tenantGuard.EnsureCanAccess(unit.TenantId);
 
         // check usage
         var used = await context.ItemUnits.AnyAsync(iu => iu.UnitId == unit.Id, cancellationToken);

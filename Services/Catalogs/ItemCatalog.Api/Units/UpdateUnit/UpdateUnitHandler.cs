@@ -12,13 +12,15 @@ public class UpdateUnitCommandValidator : AbstractValidator<UpdateUnitCommand>
     }
 }
 
-internal class UpdateUnitHandler(ItemCatalogDbContext context) : IRequestHandler<UpdateUnitCommand, UpdateUnitResult>
+internal class UpdateUnitHandler(ItemCatalogDbContext context, ITenantGuard tenantGuard) : IRequestHandler<UpdateUnitCommand, UpdateUnitResult>
 {
     public async Task<UpdateUnitResult> Handle(UpdateUnitCommand command, CancellationToken cancellationToken)
     {
         var unit = await context.Units.FindAsync(new object[] { command.Id }, cancellationToken);
 
         if (unit is null) throw new NotFoundException("Unit", command.Id);
+
+        tenantGuard.EnsureCanAccess(unit.TenantId);
 
         unit.Code = command.Code;
         unit.Name = command.Name;

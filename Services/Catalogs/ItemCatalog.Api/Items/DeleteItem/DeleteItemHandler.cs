@@ -4,7 +4,7 @@ public record DeleteItemCommand(Guid Id) : IRequest<DeleteItemResult>;
 
 public record DeleteItemResult(bool IsSuccess);
 
-internal class DeleteItemHandler(ItemCatalogDbContext context) : IRequestHandler<DeleteItemCommand, DeleteItemResult>
+internal class DeleteItemHandler(ItemCatalogDbContext context, ITenantGuard tenantGuard) : IRequestHandler<DeleteItemCommand, DeleteItemResult>
 {
     public async Task<DeleteItemResult> Handle(DeleteItemCommand command, CancellationToken cancellationToken)
     {
@@ -12,6 +12,8 @@ internal class DeleteItemHandler(ItemCatalogDbContext context) : IRequestHandler
 
         if (item == null)
             throw new NotFoundException("Item not found.");
+
+        tenantGuard.EnsureCanAccess(item.TenantId);
 
         // soft delete
         item.Status = Status.Deleted;

@@ -8,3 +8,4 @@ global using MediatR;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using BuildingBlocks.Exceptions;
+global using BuildingBlocks.Application.Interfaces;

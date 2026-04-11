@@ -4,8 +4,10 @@ namespace ItemCatalog.Api.Data;
 
 public class ItemCatalogDbContext : DbContext
 {
-    public ItemCatalogDbContext(DbContextOptions<ItemCatalogDbContext> options) : base(options)
+    private readonly ICurrentUser _currentUser;
+    public ItemCatalogDbContext(DbContextOptions<ItemCatalogDbContext> options, ICurrentUser currentUser) : base(options)
     {
+        _currentUser = currentUser;
     }
 
     public DbSet<Item> Items { get; set; }
@@ -18,6 +20,20 @@ public class ItemCatalogDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        modelBuilder.Entity<Item>()
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId);
+
+        // Allow global datas(TenantId == Guid.Empty), which are shared across tenants
+        modelBuilder.Entity<MeasurementUnit>()
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty);
+
+        modelBuilder.Entity<Category>()
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty);
+
+        modelBuilder.Entity<Tag>()
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty);
+
         base.OnModelCreating(modelBuilder);
     }
 
