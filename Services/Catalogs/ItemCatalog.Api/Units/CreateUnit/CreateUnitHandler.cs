@@ -22,6 +22,13 @@ internal class CreateUnitHandler(ItemCatalogDbContext context) : IRequestHandler
             Name = command.Name
         };
 
+        var existingUnit = await context.Units.FirstOrDefaultAsync(u => u.Code == command.Code, cancellationToken);
+
+        if(existingUnit is not null)
+        {
+            throw new BadRequestException($"A unit with code '{command.Code}' already exists.");
+        }
+
         await context.Units.AddAsync(unit, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
 

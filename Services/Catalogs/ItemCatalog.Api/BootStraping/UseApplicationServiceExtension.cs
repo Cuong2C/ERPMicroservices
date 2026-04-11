@@ -48,6 +48,7 @@ public static class UseApplicationServiceExtension
         app.MapUpdateItemEndpoint();
         app.MapDeleteItemEndpoint();
         app.MapGetDeletedItemsEndpoint();
+        app.MapItemCatalogEndpoints();
 
         app.UseExceptionHandler(options =>
         {

@@ -1,5 +1,3 @@
-using ItemCatalog.Api.Services;
-
 namespace ItemCatalog.Api.Items.UpdateItem;
 
 public record UpdateItemCommand(

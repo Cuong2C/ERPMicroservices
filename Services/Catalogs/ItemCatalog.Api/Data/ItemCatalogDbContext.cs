@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using ItemCatalog.Api.Data.Configurations;
+using System.Reflection;
 
 namespace ItemCatalog.Api.Data;
 
@@ -16,6 +17,7 @@ public class ItemCatalogDbContext : DbContext
     public DbSet<MeasurementUnit> Units { get; set; }
     public DbSet<ItemCategory> ItemCategories { get; set; }
     public DbSet<ItemUnit> ItemUnits { get; set; }
+    public DbSet<ItemSellPrice> ItemSellPrices { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,6 +35,9 @@ public class ItemCatalogDbContext : DbContext
 
         modelBuilder.Entity<Tag>()
                 .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty);
+
+        modelBuilder.Entity<ItemSellPrice>()
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId);
 
         base.OnModelCreating(modelBuilder);
     }
