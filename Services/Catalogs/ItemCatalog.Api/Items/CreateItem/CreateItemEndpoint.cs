@@ -34,6 +34,9 @@ public static class CreateItemEndpoint
 
             return Results.Created($"/items/{responseData.Id}", result);
         })
+            .WithTags("Items")
+            .WithSummary("Create a new item")
+            .WithDescription("Creates a new item with units, categories and tags. Returns created item id.")
             .WithName("CreateItem");
 
         return endpoints;

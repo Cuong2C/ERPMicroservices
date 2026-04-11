@@ -54,6 +54,9 @@ public static class GetItemByIdEndpoint
             var response = Result<GetItemByIdResponse>.Success(responseData);
             return Results.Ok(response);
         })
+        .WithTags("Items")
+        .WithSummary("Get item by id")
+        .WithDescription("Returns detailed information of an item including units, categories and tags.")
         .WithName("GetItemById");
 
         return endpoints;

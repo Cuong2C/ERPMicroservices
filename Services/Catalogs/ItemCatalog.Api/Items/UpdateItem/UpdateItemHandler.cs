@@ -15,7 +15,7 @@ public record UpdateItemCommand(
     Status? Status
 ) : IRequest<UpdateItemResult>;
 
-public record UpdateItemResult(bool IsSuccess);
+public record UpdateItemResult(Guid Id);
 
 public class UpdateItemCommandValidator : AbstractValidator<UpdateItemCommand>
 {
@@ -94,6 +94,6 @@ internal class UpdateItemHandler(ItemCatalogDbContext context) : IRequestHandler
         context.Items.Update(item);
         await context.SaveChangesAsync(cancellationToken);
 
-        return new UpdateItemResult(true);
+        return new UpdateItemResult(item.Id);
     }
 }

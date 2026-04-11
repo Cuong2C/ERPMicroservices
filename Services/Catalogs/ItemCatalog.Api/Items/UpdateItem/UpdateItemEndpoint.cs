@@ -20,7 +20,7 @@ public record ItemUnitDto(
     decimal ConversionRate
 );
 
-public record UpdateItemResponse(bool IsSuccess);
+public record UpdateItemResponse(Guid Id);
 
 public static class UpdateItemEndpoint
 {

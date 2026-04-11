@@ -47,6 +47,9 @@ public static class GetItemsEndpoint
             var result = Result<GetItemsResponse>.Success(responseData);
             return Results.Ok(result);
         })
+        .WithTags("Items")
+        .WithSummary("Retrieve items")
+        .WithDescription("Returns a paged list of items. Supports filtering by keyword, category ids and tag ids.")
         .WithName("GetItems");
 
         return endpoints;

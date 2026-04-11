@@ -53,7 +53,7 @@ internal class GetItemByIdHandler(ItemCatalogDbContext context) : IRequestHandle
 
         if (result is null)
         {
-            throw new KeyNotFoundException($"Item with Id {request.Id} not found.");
+            throw new NotFoundException("Item", request.Id);
         }
 
         return result;
