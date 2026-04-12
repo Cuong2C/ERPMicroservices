@@ -7,7 +7,7 @@ public static class GetLatestItemSellPriceEndpoint
 {
     public static IEndpointRouteBuilder MapGetLatestItemSellPriceEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("/items/sell-prices/latest", async ([AsParameters] GetLatestItemSellPriceRequest request, ISender sender) =>
+        endpoints.MapGet("/sell-prices/latest", async ([AsParameters] GetLatestItemSellPriceRequest request, ISender sender) =>
         {
             var query = request.Adapt<GetLatestItemSellPriceQuery>();
             var handlerResult = await sender.Send(query);

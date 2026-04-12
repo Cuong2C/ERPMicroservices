@@ -30,8 +30,14 @@ public class ItemCatalogDbContext : DbContext
         modelBuilder.Entity<MeasurementUnit>()
                 .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty);
 
+        modelBuilder.Entity<ItemUnit>()
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId);
+
         modelBuilder.Entity<Category>()
                 .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty);
+
+        modelBuilder.Entity<ItemCategory>()
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId);
 
         modelBuilder.Entity<Tag>()
                 .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty);

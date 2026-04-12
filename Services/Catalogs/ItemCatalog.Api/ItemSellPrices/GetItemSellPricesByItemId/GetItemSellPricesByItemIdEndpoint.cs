@@ -8,7 +8,7 @@ public static class GetItemSellPricesByItemIdEndpoint
 {
     public static IEndpointRouteBuilder MapGetItemSellPricesEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("/items/{itemId:guid}/sell-prices", async (Guid itemId, [AsParameters] GetItemSellPricesByItemIdRequest request, ISender sender) =>
+        endpoints.MapGet("/{itemId:guid}/sell-prices", async (Guid itemId, [AsParameters] GetItemSellPricesByItemIdRequest request, ISender sender) =>
         {
             var query = request.Adapt<GetItemSellPricesByItemIdQuery>() with { ItemId = itemId };
             var handlerResult = await sender.Send(query);

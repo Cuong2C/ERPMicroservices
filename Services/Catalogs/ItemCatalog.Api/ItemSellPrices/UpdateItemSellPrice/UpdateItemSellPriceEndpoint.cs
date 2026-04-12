@@ -7,7 +7,7 @@ public static class UpdateItemSellPriceEndpoint
 {
     public static IEndpointRouteBuilder MapUpdateItemSellPriceEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapPut("/items/sell-prices", async (UpdateItemSellPriceRequest request, ISender sender) =>
+        endpoints.MapPut("/sell-prices", async (UpdateItemSellPriceRequest request, ISender sender) =>
         {
             var command = request.Adapt<UpdateItemSellPriceCommand>();
             var handlerResult = await sender.Send(command);

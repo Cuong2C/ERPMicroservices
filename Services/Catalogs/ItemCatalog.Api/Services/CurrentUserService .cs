@@ -6,7 +6,7 @@ public class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUse
         httpContextAccessor.HttpContext?.User?.FindFirst("sub")?.Value;
 
     public Guid TenantId =>
-         Guid.Parse(httpContextAccessor.HttpContext?.User?.FindFirst("tenantId")?.Value!);
+         Guid.Parse(httpContextAccessor.HttpContext?.User?.FindFirst("tenantId")?.Value ?? Guid.Empty.ToString());
 
     public bool IsRootAdmin => 
         httpContextAccessor.HttpContext?.User?.Claims.Any(c => c.Type == "roles" && c.Value == "RootAdmin") == true;

@@ -27,27 +27,6 @@ public static class UseApplicationServiceExtension
 {
     public static WebApplication UseItemCatalogApplicationServices(this WebApplication app)
     {
-        app.MapCreateItemEndpoint();
-        app.MapGetItemByIdEndpoint();
-        app.MapCreateUnitEndpoint();
-        app.MapGetUnitsEndpoint();
-        app.MapGetUnitByIdEndpoint();
-        app.MapUpdateUnitEndpoint();
-        app.MapDeleteUnitEndpoint();
-        app.MapCreateCategoryEndpoint();
-        app.MapGetCategoriesEndpoint();
-        app.MapGetCategoryByIdEndpoint();
-        app.MapUpdateCategoryEndpoint();
-        app.MapDeleteCategoryEndpoint();
-        app.MapCreateTagEndpoint();
-        app.MapGetTagsEndpoint();
-        app.MapGetTagByIdEndpoint();
-        app.MapUpdateTagEndpoint();
-        app.MapDeleteTagEndpoint();
-        app.MapGetItemsEndpoint();
-        app.MapUpdateItemEndpoint();
-        app.MapDeleteItemEndpoint();
-        app.MapGetDeletedItemsEndpoint();
         app.MapItemCatalogEndpoints();
 
         app.UseExceptionHandler(options =>

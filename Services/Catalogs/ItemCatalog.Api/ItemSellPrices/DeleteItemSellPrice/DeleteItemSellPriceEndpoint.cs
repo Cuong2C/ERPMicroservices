@@ -6,7 +6,7 @@ public static class DeleteItemSellPriceEndpoint
 {
     public static IEndpointRouteBuilder MapDeleteItemSellPriceEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapDelete("/items/sell-prices/{id:guid}", async (Guid id, ISender sender) =>
+        endpoints.MapDelete("/sell-prices/{id:guid}", async (Guid id, ISender sender) =>
         {
             var command = new DeleteItemSellPriceCommand(id);
             var handlerResult = await sender.Send(command);

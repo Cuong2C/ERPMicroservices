@@ -7,13 +7,13 @@ public static class CreateItemSellPriceEndpoint
 {
     public static IEndpointRouteBuilder MapCreateItemSellPriceEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapPost("/items/sell-prices", async (CreateItemSellPriceRequest request, ISender sender) =>
+        endpoints.MapPost("/sell-prices", async (CreateItemSellPriceRequest request, ISender sender) =>
         {
             var command = request.Adapt<CreateItemSellPriceCommand>();
             var handlerResult = await sender.Send(command);
             var responseData = handlerResult.Adapt<CreateItemSellPriceResponse>();
             var result = Result<CreateItemSellPriceResponse>.Success(responseData);
-            return Results.Created($"/items/sell-prices/{responseData.Id}", result);
+            return Results.Created($"/sell-prices/{responseData.Id}", result);
         })
         .WithTags("ItemSellPrices")
         .WithSummary("Create item sell price")

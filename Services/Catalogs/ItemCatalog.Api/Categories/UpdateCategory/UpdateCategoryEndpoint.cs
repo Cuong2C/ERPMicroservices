@@ -15,6 +15,9 @@ public static class UpdateCategoryEndpoint
             var result = Result<UpdateCategoryResponse>.Success(responseData);
             return Results.Ok(result);
         })
+        .WithTags("Categories")
+        .WithSummary("Update a category")
+        .WithDescription("Updates a category by id and returns the updated id.")
         .WithName("UpdateCategory");
 
         return endpoints;
