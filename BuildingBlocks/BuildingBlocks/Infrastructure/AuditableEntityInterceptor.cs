@@ -24,13 +24,16 @@ public class AuditableEntityInterceptor(ICurrentUser currentUserService) : SaveC
         if (context == null) return;
 
         var userId = currentUserService.UserId ?? "system";
+        var tentantId = currentUserService.TenantId;
 
         foreach (var entry in context.ChangeTracker.Entries<AuditableEntity>())
         {
 
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.TenantId = currentUserService.TenantId;
+                if(tentantId != Guid.Empty)
+                    entry.Entity.TenantId = tentantId;
+
                 entry.Entity.CreatedBy = userId;
                 entry.Entity.CreatedAt = DateTime.UtcNow;
             }

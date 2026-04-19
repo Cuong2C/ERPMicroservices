@@ -6,6 +6,9 @@
     <Project Path="BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj" Id="eecc2a9a-09ba-4b9d-9d7a-5583730d8d22" />
   </Folder>
   <Folder Name="/Services/" />
+  <Folder Name="/Services/Auths/">
+    <Project Path="Services/AuthServices/AuthService.Api/AuthService.Api.csproj" Id="5a0b9265-bc5f-4211-acc4-9e0d121e22c2" />
+  </Folder>
   <Folder Name="/Services/Catalogs/">
     <Project Path="Services/Catalogs/ItemCatalog.Api/ItemCatalog.Api.csproj" Id="f470dd98-48f3-425a-a8b1-d5beb484594a" />
   </Folder>

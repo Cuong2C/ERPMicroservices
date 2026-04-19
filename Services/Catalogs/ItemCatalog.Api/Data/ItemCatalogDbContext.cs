@@ -1,5 +1,4 @@
-﻿using ItemCatalog.Api.Data.Configurations;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace ItemCatalog.Api.Data;
 
