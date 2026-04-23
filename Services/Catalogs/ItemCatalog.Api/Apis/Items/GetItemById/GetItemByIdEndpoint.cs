@@ -1,6 +1,4 @@
-﻿using ItemCatalog.Api.Items.GetItemById;
-
-namespace ItemCatalog.Api.Apis.Items.GetItemById;
+﻿namespace ItemCatalog.Api.Apis.Items.GetItemById;
 
 public record GetItemByIdResponse(
     Guid Id,

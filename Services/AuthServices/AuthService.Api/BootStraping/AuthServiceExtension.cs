@@ -1,5 +1,4 @@
 ﻿using AuthService.Api.Data;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace AuthService.Api.BootStraping;
@@ -16,6 +15,10 @@ public static class AuthServiceExtension
         var connectionString = configuration.GetConnectionString("Database");
         services.AddDbContext<AuthServiceDbContext>(options =>
             options.UseNpgsql(connectionString));
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+        services.AddHttpContextAccessor();
 
         return services;
     }

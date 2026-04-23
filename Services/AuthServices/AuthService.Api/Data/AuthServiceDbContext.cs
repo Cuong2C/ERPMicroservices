@@ -1,6 +1,4 @@
-﻿using AuthService.Api.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace AuthService.Api.Data;
 
@@ -16,8 +14,10 @@ public class AuthServiceDbContext : DbContext
     public DbSet<Scope> Scopes { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<UserClaim> UserClaims { get; set; }
+    public DbSet<UserScope> UserScopes { get; set; }
     public DbSet<RoleClaim> RoleClaims { get; set; }
     public DbSet<ClaimScope> ClaimScopes { get; set; }
+    public DbSet<Tenant> Tenants { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

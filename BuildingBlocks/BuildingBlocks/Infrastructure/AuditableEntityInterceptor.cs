@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace BuildingBlocks.Infrastructure;
 
-public class AuditableEntityInterceptor(ICurrentUser currentUserService) : SaveChangesInterceptor
+public class AuditableEntityInterceptor(ICurrentUser currentUser) : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
@@ -23,8 +23,8 @@ public class AuditableEntityInterceptor(ICurrentUser currentUserService) : SaveC
     {
         if (context == null) return;
 
-        var userId = currentUserService.UserId ?? "system";
-        var tentantId = currentUserService.TenantId;
+        var userId = currentUser.UserId ?? "system";
+        var tentantId = currentUser.TenantId;
 
         foreach (var entry in context.ChangeTracker.Entries<AuditableEntity>())
         {

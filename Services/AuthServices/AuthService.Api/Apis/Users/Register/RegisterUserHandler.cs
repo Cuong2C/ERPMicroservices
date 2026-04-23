@@ -1,5 +1,4 @@
-﻿using AuthService.Api.Data;
-using AuthService.Api.Identity;
+﻿using AuthService.Api.Identity;
 
 namespace AuthService.Api.Apis.Users.Register;
 
@@ -12,11 +11,18 @@ public class RegisterUserHandler(AuthServiceDbContext context) : IRequestHandler
     {
         var user = new User
         {
-            Id = Guid.NewGuid(),
             Username = request.Username,
             PasswordHash = CustomHasher.HashByArgon2(request.Password),
             TenantId = request.TenantId
         };
+
+        var role = await context.Roles.FirstOrDefaultAsync(r => r.Name == "Admin");
+
+        user.UserRoles.Add(new UserRole
+        {
+            UserId = user.Id,
+            RoleId = role!.Id
+        });
 
         await context.Users.AddAsync(user);
         await context.SaveChangesAsync(cancellationToken);

@@ -5,3 +5,8 @@ global using BuildingBlocks.Domain;
 global using BuildingBlocks.Application.Results;
 global using Mapster;
 global using MediatR;
+global using AuthService.Api.Data;
+global using BuildingBlocks.Exceptions;
+global using AuthService.Api.Enums;
+global using FluentValidation;
+global using BuildingBlocks.Application.Interfaces;
