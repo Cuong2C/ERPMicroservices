@@ -1,5 +1,3 @@
-using ItemCatalog.Api.ItemSellPrices.GetItemSellPriceById;
-
 namespace ItemCatalog.Api.Apis.ItemSellPrices.GetItemSellPriceById;
 
 public record GetItemSellPriceByIdResponse(Guid Id, Guid ItemId, decimal Price, DateTime EffectiveDate, DateTime CreatedAt, string CreatedBy, DateTime LastModifiedAt, string LastModifiedBy);

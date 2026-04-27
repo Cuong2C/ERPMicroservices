@@ -1,5 +1,3 @@
-using ItemCatalog.Api.Categories.DeleteCategory;
-
 namespace ItemCatalog.Api.Apis.Categories.DeleteCategory;
 
 public record DeleteCategoryResponse(Guid Id);

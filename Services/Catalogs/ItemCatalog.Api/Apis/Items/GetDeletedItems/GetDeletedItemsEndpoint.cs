@@ -1,4 +1,3 @@
-using ItemCatalog.Api.Items.GetItems;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ItemCatalog.Api.Apis.Items.GetDeletedItems;
@@ -41,7 +40,7 @@ public static class GetDeletedItemsEndpoint
             [FromQuery] int? pageSize,
             ISender sender) =>
         {
-            var request = new GetItemsRequest(keyword, categoryIds?.ToList(), tagIds?.ToList(), pageNumber, pageSize);
+            var request = new GetDeletedItemsRequest(keyword, categoryIds?.ToList(), tagIds?.ToList(), pageNumber, pageSize);
             var query = request.Adapt<GetDeletedItemsQuery>();
             var handlerResult = await sender.Send(query);
             var responseData = handlerResult.Adapt<GetDeletedItemsResponse>();

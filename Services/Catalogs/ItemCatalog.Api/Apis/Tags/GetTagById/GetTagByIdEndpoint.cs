@@ -1,5 +1,3 @@
-using ItemCatalog.Api.Tags.GetTagById;
-
 namespace ItemCatalog.Api.Apis.Tags.GetTagById;
 
 public record GetTagByIdResponse(Guid Id, string Name, DateTime CreatedAt, string CreatedBy, DateTime LastModifiedAt, string LastModifiedBy);

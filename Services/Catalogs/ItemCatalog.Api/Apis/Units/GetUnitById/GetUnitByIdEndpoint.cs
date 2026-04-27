@@ -1,5 +1,3 @@
-using ItemCatalog.Api.Units.GetUnitById;
-
 namespace ItemCatalog.Api.Apis.Units.GetUnitById;
 
 public record GetUnitByIdResponse(Guid Id, string Code, string Name, DateTime CreatedAt, string CreatedBy, DateTime LastModifiedAt, string LastModifiedBy);

@@ -1,5 +1,3 @@
-using ItemCatalog.Api.Tags.UpdateTag;
-
 namespace ItemCatalog.Api.Apis.Tags.UpdateTag;
 
 public record UpdateTagRequest(string Name);

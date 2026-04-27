@@ -1,8 +1,8 @@
-﻿using BuildingBlocks.Application.Interfaces;
+﻿using AuthService.Api.Identity.Interfaces;
 
 namespace AuthService.Api.Identity
 {
-    public class TenantGuard(ICurrentUser currentUser) : ITenantGuard
+    public class TenantGuard(ICurrentUserAuthService currentUser) : ITenantGuard
     {
         public void EnsureCanAccess(Guid? resourceTenantId)
         {

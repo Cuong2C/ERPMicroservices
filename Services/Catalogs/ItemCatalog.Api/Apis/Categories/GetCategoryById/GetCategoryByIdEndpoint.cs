@@ -1,5 +1,3 @@
-using ItemCatalog.Api.Categories.GetCategoryById;
-
 namespace ItemCatalog.Api.Apis.Categories.GetCategoryById;
 
 public record GetCategoryByIdResponse(Guid Id, string Code, string Name, DateTime CreatedAt, string CreatedBy, DateTime LastModifiedAt, string LastModifiedBy);

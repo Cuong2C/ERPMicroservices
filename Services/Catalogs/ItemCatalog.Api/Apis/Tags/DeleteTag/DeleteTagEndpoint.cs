@@ -1,5 +1,3 @@
-using ItemCatalog.Api.Tags.DeleteTag;
-
 namespace ItemCatalog.Api.Apis.Tags.DeleteTag;
 
 public record DeleteTagResponse(Guid Id);

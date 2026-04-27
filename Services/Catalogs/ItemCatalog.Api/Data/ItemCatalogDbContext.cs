@@ -23,26 +23,26 @@ public class ItemCatalogDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         modelBuilder.Entity<Item>()
-                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId);
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || _currentUser.IsRootAdmin);
 
         // Allow global datas(TenantId == Guid.Empty), which are shared across tenants
         modelBuilder.Entity<MeasurementUnit>()
-                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty);
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty || _currentUser.IsRootAdmin);
 
         modelBuilder.Entity<ItemUnit>()
-                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId);
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || _currentUser.IsRootAdmin);
 
         modelBuilder.Entity<Category>()
-                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty);
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty || _currentUser.IsRootAdmin);
 
         modelBuilder.Entity<ItemCategory>()
-                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId);
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || _currentUser.IsRootAdmin);
 
         modelBuilder.Entity<Tag>()
-                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty);
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || x.TenantId == Guid.Empty || _currentUser.IsRootAdmin);
 
         modelBuilder.Entity<ItemSellPrice>()
-                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId);
+                .HasQueryFilter(x => x.TenantId == _currentUser.TenantId || _currentUser.IsRootAdmin);
 
         base.OnModelCreating(modelBuilder);
     }

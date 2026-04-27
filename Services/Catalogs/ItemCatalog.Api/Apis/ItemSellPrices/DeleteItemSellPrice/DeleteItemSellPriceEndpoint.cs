@@ -1,5 +1,3 @@
-using ItemCatalog.Api.ItemSellPrices.DeleteItemSellPrice;
-
 namespace ItemCatalog.Api.Apis.ItemSellPrices.DeleteItemSellPrice;
 
 public record DeleteItemSellPriceResponse(Guid Id);

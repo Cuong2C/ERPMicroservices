@@ -12,6 +12,6 @@ public class User : AuditableEntity
     public DateTime? LockoutEnd { get; set; }
     public int AccessFailedCount { get; set; }
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-    public ICollection<UserClaim> UserClaims { get; set; } = new List<UserClaim>();
+    public ICollection<UserPermission> UserPermissions { get; set; } = new List<UserPermission>();
     public ICollection<UserScope> UserScopes { get; set; } = new List<UserScope>();
 }

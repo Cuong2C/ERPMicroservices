@@ -1,17 +1,17 @@
 namespace AuthService.Api.Data.Configurations;
 
-public class UserClaimConfiguration : IEntityTypeConfiguration<UserClaim>
+public class UserClaimConfiguration : IEntityTypeConfiguration<UserPermission>
 {
-    public void Configure(EntityTypeBuilder<UserClaim> builder)
+    public void Configure(EntityTypeBuilder<UserPermission> builder)
     {
-        builder.HasKey(uc => new { uc.UserId, uc.ClaimId });
+        builder.HasKey(uc => new { uc.UserId, uc.PermissionId });
 
         builder.HasOne(uc => uc.User)
-               .WithMany(u => u.UserClaims)
+               .WithMany(u => u.UserPermissions)
                .HasForeignKey(uc => uc.UserId);
 
-        builder.HasOne(uc => uc.Claim)
+        builder.HasOne(uc => uc.Permission)
                .WithMany()
-               .HasForeignKey(uc => uc.ClaimId);
+               .HasForeignKey(uc => uc.PermissionId);
     }
 }

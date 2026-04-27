@@ -1,5 +1,3 @@
-using ItemCatalog.Api.Categories.UpdateCategory;
-
 namespace ItemCatalog.Api.Apis.Categories.UpdateCategory;
 
 public record UpdateCategoryRequest(string Code, string Name);

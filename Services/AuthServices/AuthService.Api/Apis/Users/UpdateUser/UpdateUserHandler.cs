@@ -17,7 +17,7 @@ internal class UpdateUserHandler(AuthServiceDbContext context, ITenantGuard tena
     {
         var user = await context.Users
             .Include(u => u.UserRoles)
-            .Include(u => u.UserClaims)
+            .Include(u => u.UserPermissions)
             .Include(u => u.UserScopes).ThenInclude(us => us.Scope)
             .FirstOrDefaultAsync(u => u.Id == command.Id, cancellationToken);
 
@@ -35,10 +35,10 @@ internal class UpdateUserHandler(AuthServiceDbContext context, ITenantGuard tena
         user.UserRoles = roles.Select(r => new UserRole { RoleId = r.Id }).ToList();
 
         // update claims
-        var claims = context.Claims.Where(c => command.Claims.Contains(c.Id)).ToList();
+        var claims = context.Permissions.Where(c => command.Claims.Contains(c.Id)).ToList();
         if (claims.Count != command.Claims.Count()) throw new NotFoundException("One or more claims not found.");
-        user.UserClaims.Clear();
-        user.UserClaims = claims.Select(c => new UserClaim { ClaimId = c.Id }).ToList();
+        user.UserPermissions.Clear();
+        user.UserPermissions = claims.Select(c => new UserPermission { PermissionId = c.Id }).ToList();
 
         // update scopes
         user.UserScopes.Clear();

@@ -1,5 +1,3 @@
-using ItemCatalog.Api.Units.UpdateUnit;
-
 namespace ItemCatalog.Api.Apis.Units.UpdateUnit;
 
 public record UpdateUnitRequest(string Code, string Name);

@@ -1,5 +1,3 @@
-using ItemCatalog.Api.Items.DeleteItem;
-
 namespace ItemCatalog.Api.Apis.Items.DeleteItem;
 
 public record DeleteItemResponse(bool IsSuccess);

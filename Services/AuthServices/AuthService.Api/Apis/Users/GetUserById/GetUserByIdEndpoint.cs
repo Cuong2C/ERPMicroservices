@@ -3,7 +3,7 @@ namespace AuthService.Api.Apis.Users.GetUserById;
 public record GetUserByIdResponse(Guid Id, string Username, Status Status, bool IsLocked, DateTime? LockoutEnd, int AccessFailedCount, IEnumerable<RoleDto> Roles, IEnumerable<ClaimDto>? Claims, IEnumerable<ScopeDto>? Scopes, DateTime CreatedAt, string CreatedBy, DateTime LastModifiedAt, string LastModifiedBy);
 
 public record RoleDto(Guid Id, string Name);
-public record ClaimDto(Guid Id, string Type, ClaimValue Value);
+public record ClaimDto(Guid Id, string Type, PermissionAction Value);
 public record ScopeDto(Guid Id, string Type, string Value);
 public static class GetUserByIdEndpoint
 {

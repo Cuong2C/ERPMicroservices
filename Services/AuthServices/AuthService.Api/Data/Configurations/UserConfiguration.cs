@@ -10,7 +10,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Status).IsRequired();
         
         builder.HasMany(u => u.UserRoles).WithOne(ur => ur.User).HasForeignKey(ur => ur.UserId).OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany(u => u.UserClaims).WithOne(uc => uc.User).HasForeignKey(uc => uc.UserId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(u => u.UserPermissions).WithOne(uc => uc.User).HasForeignKey(uc => uc.UserId).OnDelete(DeleteBehavior.Cascade);
         builder.HasMany(u => u.UserScopes).WithOne(us => us.User).HasForeignKey(us => us.UserId).OnDelete(DeleteBehavior.Cascade);
     }
 }

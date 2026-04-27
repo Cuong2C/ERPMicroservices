@@ -1,5 +1,3 @@
-using ItemCatalog.Api.Units.DeleteUnit;
-
 namespace ItemCatalog.Api.Apis.Units.DeleteUnit;
 
 public record DeleteUnitResponse(Guid Id);

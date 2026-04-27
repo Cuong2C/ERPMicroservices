@@ -40,13 +40,13 @@ public class CreateUserHandler(AuthServiceDbContext context) : IRequestHandler<C
 
         user.UserRoles = roles.Select(r => new UserRole { RoleId = r.Id }).ToList();
 
-        var claims = context.Claims.Where(c => command.Claims.Contains(c.Id));
+        var claims = context.Permissions.Where(c => command.Claims.Contains(c.Id));
         if(claims.Count() != command.Claims.Count())
         {
             throw new NotFoundException("One or more claims not found.");
         }
 
-        user.UserClaims = claims.Select(c => new UserClaim { ClaimId = c.Id }).ToList();
+        user.UserPermissions = claims.Select(c => new UserPermission { PermissionId = c.Id }).ToList();
 
         foreach(var scopeDto in command.Scopes)
         {
