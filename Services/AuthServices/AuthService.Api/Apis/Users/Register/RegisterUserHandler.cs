@@ -1,6 +1,4 @@
-﻿using AuthService.Api.Identity;
-
-namespace AuthService.Api.Apis.Users.Register;
+﻿namespace AuthService.Api.Apis.Users.Register;
 
 public record RegisterUserCommand(string Username, string Password, Guid TenantId) : IRequest<RegisterUserResult>;
 public record RegisterUserResult(Guid Id);
@@ -16,7 +14,7 @@ public class RegisterUserHandler(AuthServiceDbContext context) : IRequestHandler
             TenantId = request.TenantId
         };
 
-        var role = await context.Roles.FirstOrDefaultAsync(r => r.Name == "Admin");
+        var role = await context.Roles.FirstOrDefaultAsync(r => r.Name == StaticDetail.ROLE_ADMIN);
 
         user.UserRoles.Add(new UserRole
         {

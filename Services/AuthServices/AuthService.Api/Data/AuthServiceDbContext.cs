@@ -17,7 +17,7 @@ public class AuthServiceDbContext : DbContext
     public DbSet<UserScope> UserScopes { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<Tenant> Tenants { get; set; }
-
+    public DbSet<RevokedToken> RevokedTokens { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

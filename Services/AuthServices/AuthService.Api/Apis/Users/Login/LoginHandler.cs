@@ -1,5 +1,4 @@
-﻿using AuthService.Api.Identity;
-using AuthService.Api.Services.JwtServices;
+﻿using AuthService.Api.Services.JwtServices.Interfaces;
 
 namespace AuthService.Api.Apis.Users.Login;
 public record LoginCommand(string Username, string Password) : IRequest<LoginResult>;
@@ -16,7 +15,26 @@ internal class LoginHandler(AuthServiceDbContext context, IJwtService jwtService
             throw new UnauthorizedException("Invalid username or password");
 
         if (!CustomHasher.VerifyByArgon2(user.PasswordHash, request.Password))
+        {
+            
+            if (user.AccessFailedCount >= 4)
+            {
+                user.AccessFailedCount = 0;
+                user.LockoutEnd = DateTime.UtcNow.AddMinutes(15);
+                await context.SaveChangesAsync(cancellationToken);
+                throw new UnauthorizedException("Account locked due to multiple failed login attempts");
+            }
+
+            user.AccessFailedCount++;
+            await context.SaveChangesAsync(cancellationToken);
             throw new UnauthorizedException("Invalid username or password");
+        }
+
+        if (user.LockoutEnd.HasValue && user.LockoutEnd > DateTime.UtcNow)
+            throw new ForbiddenException("Account locked in 15 minutes due to multiple failed login attempts");
+
+        if(user.IsLocked)
+            throw new ForbiddenException("Account is locked");
 
         // Generating tokens and returning the result
         var accessToken = jwtService.GenerateToken(user);

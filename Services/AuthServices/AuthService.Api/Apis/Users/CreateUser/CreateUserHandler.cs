@@ -1,7 +1,4 @@
-﻿using AuthService.Api.Identity;
-using FluentValidation;
-
-namespace AuthService.Api.Apis.Users.CreateUser;
+﻿namespace AuthService.Api.Apis.Users.CreateUser;
 
 public record CreateUserCommand(
     string Username,
@@ -31,6 +28,16 @@ public class CreateUserHandler(AuthServiceDbContext context) : IRequestHandler<C
             Username = command.Username,
             PasswordHash = CustomHasher.HashByArgon2(command.Password)
         };
+
+        var adminOrRootAdmin = context.UserRoles
+           .Where(ur => ur.Role.Name == StaticDetail.ROLE_ADMIN || ur.Role.Name == StaticDetail.ROLE_ROOT_ADMIN)
+           .Select(ur => ur.RoleId)
+           .ToHashSet();
+
+        if (command.Roles.Any(r => adminOrRootAdmin.Contains(r)))
+        {
+            throw new BadRequestException("Cannot assign admin roles.");
+        }
 
         var roles = context.Roles.Where(r => command.Roles.Contains(r.Id));
         if(roles.Count() != command.Roles.Count())

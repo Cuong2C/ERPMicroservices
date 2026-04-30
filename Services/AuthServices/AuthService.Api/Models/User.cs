@@ -1,6 +1,4 @@
-﻿using AuthService.Api.Enums;
-
-namespace AuthService.Api.Models;
+﻿namespace AuthService.Api.Models;
 
 public class User : AuditableEntity
 {

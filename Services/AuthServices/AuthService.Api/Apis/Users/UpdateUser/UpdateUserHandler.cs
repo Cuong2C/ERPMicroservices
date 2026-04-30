@@ -11,7 +11,7 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     }
 }
 
-internal class UpdateUserHandler(AuthServiceDbContext context, ITenantGuard tenantGuard) : IRequestHandler<UpdateUserCommand, UpdateUserResult>
+internal class UpdateUserHandler(AuthServiceDbContext context, ITenantGuard tenantGuard, IUserGuard userGuard) : IRequestHandler<UpdateUserCommand, UpdateUserResult>
 {
     public async Task<UpdateUserResult> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
@@ -24,9 +24,20 @@ internal class UpdateUserHandler(AuthServiceDbContext context, ITenantGuard tena
         if (user == null) throw new NotFoundException("User not found.");
 
         tenantGuard.EnsureCanAccess(user.TenantId);
+        userGuard.EnsureCanAccess(user.Id);
 
         user.Username = command.Username;
         user.Status = command.Status;
+
+        var adminOrRootAdmin = context.UserRoles
+           .Where(ur => ur.Role.Name == StaticDetail.ROLE_ADMIN || ur.Role.Name == StaticDetail.ROLE_ROOT_ADMIN)
+           .Select(ur => ur.RoleId)
+           .ToHashSet();
+
+        if (command.Roles.Any(r => adminOrRootAdmin.Contains(r)))
+        {
+            throw new BadRequestException("Cannot assign admin roles to this user.");
+        }
 
         // update roles
         var roles = context.Roles.Where(r => command.Roles.Contains(r.Id)).ToList();

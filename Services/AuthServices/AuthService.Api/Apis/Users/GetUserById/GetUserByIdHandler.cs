@@ -1,6 +1,3 @@
-using AuthService.Api.Identity;
-using AuthService.Api.Identity.Interfaces;
-
 namespace AuthService.Api.Apis.Users.GetUserById;
 
 public record GetUserByIdQuery(Guid Id) : IRequest<GetUserByIdResult>;

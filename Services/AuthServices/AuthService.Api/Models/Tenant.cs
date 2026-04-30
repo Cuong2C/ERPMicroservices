@@ -11,4 +11,6 @@ public class Tenant : AuditableEntity
     public int? PostalCode { get; set; }
     public string? Country { get; set; }
     public string? PhoneNumber { get; set; }
+    public Status Status { get; set; } = Status.Active;
+
 }

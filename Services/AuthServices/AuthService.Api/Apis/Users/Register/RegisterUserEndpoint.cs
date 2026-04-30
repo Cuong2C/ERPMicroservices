@@ -19,10 +19,10 @@ public static class RegisterUserEndpoint
             var result = Result<RegisterUserResponse>.Success(responseData);
             return Results.Created($"/users/{responseData.Id}", result);
         })
-            .WithTags("Users")
-            .WithSummary("Register a new user")
-            .WithDescription("Registers a new user with email, password and assigned roles. Returns created user id.")
-            .WithName("RegisterUser");
+        .WithTags("Users")
+        .WithSummary("Register a new user")
+        .WithDescription("Registers a new user with email, password and assigned roles. Returns created user id.")
+        .WithName("RegisterUser");
         return endpoints;
     }
 }

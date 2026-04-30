@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace AuthService.Api.Services.JwtServices;
+namespace AuthService.Api.Services.JwtServices.Interfaces;
 
 public interface IJwtService
 {

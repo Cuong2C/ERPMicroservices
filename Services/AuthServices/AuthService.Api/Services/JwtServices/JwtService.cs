@@ -1,11 +1,12 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using AuthService.Api.Services.JwtServices.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace AuthService.Api.Services.JwtServices;
 
-public class JwtService(JwtOptions jwtOption) : IJwtService
+public class JwtService(AuthServiceDbContext context, JwtOptions jwtOption) : IJwtService
 {
     public TokenResult GenerateToken(User user)
     {
@@ -24,7 +25,7 @@ public class JwtService(JwtOptions jwtOption) : IJwtService
             AccessToken = accessToken,
             RefreshToken = refreshToken,
             AccessTokenExpiresAtUtc = accessExpires,
-            RefreshTokenExpiresAtUtc = refreshExpires,
+            RefreshTokenExpiresAtUtc = refreshExpires
         };
     }
 
@@ -35,8 +36,8 @@ public class JwtService(JwtOptions jwtOption) : IJwtService
             new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new (JwtRegisteredClaimNames.UniqueName, user.Username),
             new (JwtRegisteredClaimNames.Jti, refreshJti),
-            new ("token_type", "refresh"),
-            new ("tennant_id", user.TenantId.ToString())
+            new (StaticDetail.CLAIM_TYPE_TOKEN_TYPE, StaticDetail.TOKEN_TYPE_REFRESH),
+            new (StaticDetail.CLAIM_TYPE_TENANT_ID, user.TenantId.ToString())
         };
 
         return BuildJwt(claims, refreshExpires);
@@ -49,8 +50,8 @@ public class JwtService(JwtOptions jwtOption) : IJwtService
             new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new (JwtRegisteredClaimNames.UniqueName, user.Username),
             new (JwtRegisteredClaimNames.Jti, accessJti),
-            new ("token_type", "access"),
-            new ("tennant_id", user.TenantId.ToString())
+            new (StaticDetail.CLAIM_TYPE_TOKEN_TYPE, StaticDetail.TOKEN_TYPE_ACCESS),
+            new (StaticDetail.CLAIM_TYPE_TENANT_ID, user.TenantId.ToString())
         };
 
         var permissions = new HashSet<string>();
@@ -72,12 +73,12 @@ public class JwtService(JwtOptions jwtOption) : IJwtService
 
         foreach(var permission in permissions)
         {
-            claims.Add(new Claim("permission", permission));
+            claims.Add(new Claim(StaticDetail.CLAIM_TYPE_PERMISSIONS, permission));
         }
 
         foreach (var userScope in user.UserScopes)
         {
-            claims.Add(new Claim("scope", $"{userScope.Scope.Type}:{userScope.Scope.Value}"));
+            claims.Add(new Claim(StaticDetail.CLAIM_TYPE_SCOPES, $"{userScope.Scope.Type}:{userScope.Scope.Value}"));
         }
 
         return BuildJwt(claims, accessExpires);
@@ -117,9 +118,9 @@ public class JwtService(JwtOptions jwtOption) : IJwtService
         if (principal == null)
             return null;
 
-        var tokenType = principal.FindFirst("token_type")?.Value;
+        var tokenType = principal.FindFirst(StaticDetail.CLAIM_TYPE_TOKEN_TYPE)?.Value;
 
-        return tokenType == "access"
+        return tokenType == StaticDetail.TOKEN_TYPE_ACCESS
             ? principal
             : null;
     }
@@ -131,9 +132,9 @@ public class JwtService(JwtOptions jwtOption) : IJwtService
         if (principal == null)
             return null;
 
-        var tokenType = principal.FindFirst("token_type")?.Value;
+        var tokenType = principal.FindFirst(StaticDetail.CLAIM_TYPE_TOKEN_TYPE)?.Value;
 
-        return tokenType == "access"
+        return tokenType == StaticDetail.TOKEN_TYPE_REFRESH
             ? principal
             : null;
     }
@@ -157,8 +158,12 @@ public class JwtService(JwtOptions jwtOption) : IJwtService
 
         var principal = new JwtSecurityTokenHandler().ValidateToken(token, parameters, out _);
 
-        //var jti = principal.FindFirst("jti")?.Value;
-        // Check if the jti is revoked or not 
+        var jti = principal.FindFirst("jti")!.Value;
+        var isRevoked = context.RevokedTokens.Any(rt => rt.Jti.ToString() == jti);
+        
+        if (isRevoked)
+            return null;
+
         return principal;
     }
 }

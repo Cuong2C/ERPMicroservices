@@ -10,3 +10,7 @@ global using BuildingBlocks.Exceptions;
 global using AuthService.Api.Enums;
 global using FluentValidation;
 global using BuildingBlocks.Application.Interfaces;
+global using AuthService.Api.Identity;
+global using AuthService.Api.Identity.Interfaces;
+global using AuthService.Api.Services.JwtServices;
+global using AuthService.Api.StaticDetails;

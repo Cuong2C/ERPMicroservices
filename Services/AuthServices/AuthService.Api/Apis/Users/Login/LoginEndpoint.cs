@@ -1,6 +1,4 @@
-﻿using AuthService.Api.Services.JwtServices;
-
-namespace AuthService.Api.Apis.Users.Login;
+﻿namespace AuthService.Api.Apis.Users.Login;
 
 public record LoginRequest(string Username, string Password);
 public record LoginResponse(string AccessToken, string RefreshToken, DateTime AccessTokenExpiresAtUtc, DateTime RefreshTokenExpiresAtUtc);

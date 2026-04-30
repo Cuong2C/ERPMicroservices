@@ -12,8 +12,13 @@ builder.Services.AddAuthentication("Bearer")
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
+            ValidateIssuer = true,
+            ValidIssuer = "auth-service",
+
             ValidateAudience = true,
-            ValidAudience = "your-api", 
+            ValidAudience = "api",
+
+            ValidateLifetime = true,
             ClockSkew = TimeSpan.FromMinutes(5)
         };
     });

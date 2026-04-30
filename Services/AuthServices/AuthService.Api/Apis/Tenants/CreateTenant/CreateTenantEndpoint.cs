@@ -15,9 +15,9 @@ public record CreateTenantResponse(Guid Id);
 
 public static class CreateTenantEndpoint
 {
-    public static void MapCreateTenantEndpoint(this WebApplication app)
+    public static IEndpointRouteBuilder MapCreateTenantEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        app.MapPost("/tenants", async (CreateTenantRequest request, ISender sender) =>
+        endpoints.MapPost("/tenants", async (CreateTenantRequest request, ISender sender) =>
         {
             var command = request.Adapt<CreateTenantCommand>();
             var handlerResult = await sender.Send(command);
@@ -25,7 +25,11 @@ public static class CreateTenantEndpoint
             var result = Results.Ok(responseData);
             return Results.Created($"/tenants/{responseData.Id}", result);
         })
-        .RequireAuthorization("RootAdminPolicy")
-        .WithTags("Tenants");
+        .WithTags("Tenants")
+        .WithSummary("Create a new tenant")
+        .WithDescription("Creates a new tenant with the provided details.")
+        .WithName("CreateTenant");
+
+        return endpoints;
     }
 }

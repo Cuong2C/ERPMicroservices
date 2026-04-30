@@ -1,6 +1,4 @@
-﻿using AuthService.Api.Identity.Interfaces;
-
-namespace AuthService.Api.Identity;
+﻿namespace AuthService.Api.Identity;
 
 public class UserGuard(ICurrentUserAuthService currentUser) : IUserGuard
 {

@@ -27,10 +27,10 @@ public static class CreateUserEndpoint
             var result = Result<CreateUserResponse>.Success(responseData);
             return Results.Created($"/users/{responseData.Id}", result);
         })
-            .WithTags("Users")
-            .WithSummary("Create a new user")
-            .WithDescription("Creates a new user with roles, claims and scopes. Returns created user id.")
-            .WithName("CreateUser");
+        .WithTags("Users")
+        .WithSummary("Create a new user")
+        .WithDescription("Creates a new user with roles, claims and scopes. Returns created user id.")
+        .WithName("CreateUser");
         return endpoints;
     }
 }

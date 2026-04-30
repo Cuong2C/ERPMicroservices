@@ -1,6 +1,6 @@
 ﻿using AuthService.Api.Identity;
 using AuthService.Api.Identity.Interfaces;
-using AuthService.Api.Services.JwtServices;
+using AuthService.Api.Services.JwtServices.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 
