@@ -2,7 +2,7 @@
 
 public interface ICurrentUser
 {
-    Guid TenantId { get; }
+    string? TenantId { get; }
     string? UserId { get; }
     bool IsRootAdmin { get; }
 }

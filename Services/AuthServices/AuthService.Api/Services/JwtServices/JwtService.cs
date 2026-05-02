@@ -1,4 +1,5 @@
 ﻿using AuthService.Api.Services.JwtServices.Interfaces;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -6,7 +7,7 @@ using System.Security.Cryptography;
 
 namespace AuthService.Api.Services.JwtServices;
 
-public class JwtService(AuthServiceDbContext context, JwtOptions jwtOption) : IJwtService
+public class JwtService(AuthServiceDbContext context, IOptions<JwtOptions> jwtOption, IOptions<RsaKeyProvider> rsaKeyProvider) : IJwtService
 {
     public TokenResult GenerateToken(User user)
     {
@@ -14,8 +15,8 @@ public class JwtService(AuthServiceDbContext context, JwtOptions jwtOption) : IJ
 
         var accessJti = Guid.NewGuid().ToString();
         var refreshJti = Guid.NewGuid().ToString();
-        var accessExpires = nowUtc.AddMinutes(jwtOption.AccessTokenMinutes);
-        var refreshExpires = nowUtc.AddDays(jwtOption.RefreshTokenDays);
+        var accessExpires = nowUtc.AddMinutes(jwtOption.Value.AccessTokenMinutes);
+        var refreshExpires = nowUtc.AddDays(jwtOption.Value.RefreshTokenDays);
 
         var accessToken = BuildAccessToken(user, accessJti, accessExpires);
         var refreshToken = BuildRefeshToken(user, refreshJti, refreshExpires);
@@ -37,7 +38,7 @@ public class JwtService(AuthServiceDbContext context, JwtOptions jwtOption) : IJ
             new (JwtRegisteredClaimNames.UniqueName, user.Username),
             new (JwtRegisteredClaimNames.Jti, refreshJti),
             new (StaticDetail.CLAIM_TYPE_TOKEN_TYPE, StaticDetail.TOKEN_TYPE_REFRESH),
-            new (StaticDetail.CLAIM_TYPE_TENANT_ID, user.TenantId.ToString())
+            new (StaticDetail.CLAIM_TYPE_TENANT_ID, user.TenantId ?? "")
         };
 
         return BuildJwt(claims, refreshExpires);
@@ -51,7 +52,7 @@ public class JwtService(AuthServiceDbContext context, JwtOptions jwtOption) : IJ
             new (JwtRegisteredClaimNames.UniqueName, user.Username),
             new (JwtRegisteredClaimNames.Jti, accessJti),
             new (StaticDetail.CLAIM_TYPE_TOKEN_TYPE, StaticDetail.TOKEN_TYPE_ACCESS),
-            new (StaticDetail.CLAIM_TYPE_TENANT_ID, user.TenantId.ToString())
+            new (StaticDetail.CLAIM_TYPE_TENANT_ID, user.TenantId ?? "")
         };
 
         var permissions = new HashSet<string>();
@@ -86,27 +87,22 @@ public class JwtService(AuthServiceDbContext context, JwtOptions jwtOption) : IJ
 
     private string BuildJwt(List<Claim> claims, DateTime expires)
     {
-        using var rsa = RSA.Create();
-        rsa.ImportRSAPrivateKey(Convert.FromBase64String(jwtOption.PrivateKey), out _);
-
         var signingCredentials = new SigningCredentials(
-            new RsaSecurityKey(rsa)
+            new RsaSecurityKey(rsaKeyProvider.Value.Rsa)
             {
-                KeyId = jwtOption.KeyId
+                KeyId = jwtOption.Value.KeyId
             },
             SecurityAlgorithms.RsaSha256
         );
 
         var token = new JwtSecurityToken(
-            issuer: jwtOption.Issuer,
-            audience: jwtOption.Audience,
+            issuer: jwtOption.Value.Issuer,
+            audience: jwtOption.Value.Audience,
             claims: claims,
             notBefore: DateTime.UtcNow,
             expires: expires,
             signingCredentials: signingCredentials
         );
-
-        token.Header["kid"] = jwtOption.KeyId;
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
@@ -142,14 +138,14 @@ public class JwtService(AuthServiceDbContext context, JwtOptions jwtOption) : IJ
     private ClaimsPrincipal? ValidateToken(string token, bool validateLifetime)
     {
         using var rsa = RSA.Create();
-        rsa.ImportRSAPublicKey(Convert.FromBase64String(jwtOption.PublicKey), out _);
+        rsa.ImportRSAPublicKey(Convert.FromBase64String(jwtOption.Value.PublicKey), out _);
 
         var parameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = jwtOption.Issuer,
+            ValidIssuer = jwtOption.Value.Issuer,
             ValidateAudience = true,
-            ValidAudience = jwtOption.Audience,
+            ValidAudience = jwtOption.Value.Audience,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new RsaSecurityKey(rsa),
             ValidateLifetime = validateLifetime,

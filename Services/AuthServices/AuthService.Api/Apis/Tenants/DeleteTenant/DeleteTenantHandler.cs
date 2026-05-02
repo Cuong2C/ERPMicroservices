@@ -12,7 +12,7 @@ internal class DeleteTenantHandler(AuthServiceDbContext context, ITenantGuard te
 
         tenantGuard.EnsureCanAccess(tenant.TenantId);
 
-        if(!currentUser.IsAdmin && !currentUser.IsRootAdmin) 
+        if(!currentUser.IsShopOwner && !currentUser.IsRootAdmin) 
             throw new UnauthorizedException("Only admins can delete tenants.");
 
         tenant.Status = Status.Deleted;

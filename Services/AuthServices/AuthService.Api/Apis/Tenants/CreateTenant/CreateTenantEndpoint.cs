@@ -3,6 +3,7 @@
 public record CreateTenantRequest(
     string Name,
     string Description,
+    string? Email,
     string Address,
     string City,
     string? Region,

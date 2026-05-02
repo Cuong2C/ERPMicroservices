@@ -1,6 +1,6 @@
 namespace AuthService.Api.Apis.Tenants.UpdateTenant;
 
-public record UpdateTenantCommand(Guid Id, string Name, string Description, string Address, string City, string? Region, int? PostalCode, string? Country, string? PhoneNumber) : IRequest<UpdateTenantResult>;
+public record UpdateTenantCommand(Guid Id, string Name, string Description, string? Email, string Address, string City, string? Region, int? PostalCode, string? Country, string? PhoneNumber) : IRequest<UpdateTenantResult>;
 public record UpdateTenantResult(Guid Id);
 
 public class UpdateTenantCommandValidator : AbstractValidator<UpdateTenantCommand>
@@ -12,7 +12,7 @@ public class UpdateTenantCommandValidator : AbstractValidator<UpdateTenantComman
     }
 }
 
-internal class UpdateTenantHandler(AuthServiceDbContext context, ITenantGuard tenantGuard, IUserGuard userGuard) : IRequestHandler<UpdateTenantCommand, UpdateTenantResult>
+internal class UpdateTenantHandler(AuthServiceDbContext context, ITenantGuard tenantGuard) : IRequestHandler<UpdateTenantCommand, UpdateTenantResult>
 {
     public async Task<UpdateTenantResult> Handle(UpdateTenantCommand command, CancellationToken cancellationToken)
     {
@@ -23,6 +23,7 @@ internal class UpdateTenantHandler(AuthServiceDbContext context, ITenantGuard te
 
         tenant.Name = command.Name;
         tenant.Description = command.Description;
+        tenant.Email = command.Email;
         tenant.Address = command.Address;
         tenant.City = command.City;
         tenant.Region = command.Region;

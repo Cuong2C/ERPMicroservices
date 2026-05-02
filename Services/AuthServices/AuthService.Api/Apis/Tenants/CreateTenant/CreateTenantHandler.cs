@@ -3,6 +3,7 @@
 public record CreateTenantCommand(
     string Name,
     string Description,
+    string? Email,
     string Address,
     string City,
     string? Region,
@@ -36,6 +37,7 @@ public class CreateTenantHandler(AuthServiceDbContext context) : IRequestHandler
             Id = Guid.NewGuid(),
             Name = request.Name,
             Description = request.Description,
+            Email = request.Email,
             Address = request.Address,
             City = request.City,
             Region = request.Region,
@@ -44,7 +46,7 @@ public class CreateTenantHandler(AuthServiceDbContext context) : IRequestHandler
             PhoneNumber = request.PhoneNumber
         };
 
-        tenant.TenantId = tenant.Id;
+        tenant.TenantId = tenant.Id.ToString();
 
         context.Tenants.Add(tenant);
         await context.SaveChangesAsync();

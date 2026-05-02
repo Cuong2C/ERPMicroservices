@@ -1,6 +1,6 @@
 namespace AuthService.Api.Apis.Tenants.UpdateTenant;
 
-public record UpdateTenantRequest(Guid Id, string Name, string Description, string Address, string City, string? Region, int? PostalCode, string? Country, string? PhoneNumber);
+public record UpdateTenantRequest(Guid Id, string Name, string Description, string? Email, string Address, string City, string? Region, int? PostalCode, string? Country, string? PhoneNumber);
 public record UpdateTenantResponse(Guid Id);
 
 public static class UpdateTenantEndpoint

@@ -2,7 +2,7 @@
 {
     public class TenantGuard(ICurrentUserAuthService currentUser) : ITenantGuard
     {
-        public void EnsureCanAccess(Guid? resourceTenantId)
+        public void EnsureCanAccess(string? resourceTenantId)
         {
             if (currentUser.IsRootAdmin)
                 return;

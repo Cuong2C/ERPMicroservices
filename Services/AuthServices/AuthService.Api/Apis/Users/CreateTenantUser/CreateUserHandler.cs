@@ -1,4 +1,4 @@
-﻿namespace AuthService.Api.Apis.Users.CreateUser;
+﻿namespace AuthService.Api.Apis.Users.CreateTenantUser;
 
 public record CreateUserCommand(
     string Username,
@@ -23,6 +23,10 @@ public class CreateUserHandler(AuthServiceDbContext context) : IRequestHandler<C
 {
     public async Task<CreateUserResult> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
+        var existingUser = await context.Users.AnyAsync(u => u.Username == command.Username, cancellationToken);
+        if (existingUser)
+            throw new BadRequestException("Username already exists.");
+
         var user = new User
         {
             Username = command.Username,
@@ -30,7 +34,7 @@ public class CreateUserHandler(AuthServiceDbContext context) : IRequestHandler<C
         };
 
         var adminOrRootAdmin = context.UserRoles
-           .Where(ur => ur.Role.Name == StaticDetail.ROLE_ADMIN || ur.Role.Name == StaticDetail.ROLE_ROOT_ADMIN)
+           .Where(ur => ur.Role.Name == StaticDetail.ROLE_SHOP_OWNER || ur.Role.Name == StaticDetail.ROLE_ROOT_ADMIN)
            .Select(ur => ur.RoleId)
            .ToHashSet();
 

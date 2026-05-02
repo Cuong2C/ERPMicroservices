@@ -5,6 +5,7 @@ public class Tenant : AuditableEntity
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
     public string Description { get; set; } = string.Empty;
+    public string? Email { get; set; }
     public string? Address { get; set; }
     public string? City { get; set; }
     public string? Region { get; set; } 

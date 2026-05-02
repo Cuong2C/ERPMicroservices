@@ -31,8 +31,8 @@ public class AuditableEntityInterceptor(ICurrentUser currentUser) : SaveChangesI
 
             if (entry.State == EntityState.Added)
             {
-                if(tentantId != Guid.Empty)
-                    entry.Entity.TenantId = tentantId;
+                
+                entry.Entity.TenantId = tentantId;
 
                 entry.Entity.CreatedBy = userId;
                 entry.Entity.CreatedAt = DateTime.UtcNow;

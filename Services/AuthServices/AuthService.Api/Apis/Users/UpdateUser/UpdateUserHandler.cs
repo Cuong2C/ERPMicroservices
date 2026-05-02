@@ -1,13 +1,15 @@
 namespace AuthService.Api.Apis.Users.UpdateUser;
 
-public record UpdateUserCommand(Guid Id, string Username, Status Status, IEnumerable<Guid> Roles, IEnumerable<Guid> Claims, IEnumerable<ScopeDto> Scopes) : IRequest<UpdateUserResult>;
+public record UpdateUserCommand(Guid Id, Status Status, string Fullname, string? Email, string? Address, string? City, string? Region, int? PostalCode, string? Country, string? PhoneNumber, IEnumerable<Guid> Roles, IEnumerable<Guid> Claims, IEnumerable<ScopeDto> Scopes) : IRequest<UpdateUserResult>;
 public record UpdateUserResult(Guid Id);
 
 public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
 {
     public UpdateUserCommandValidator()
     {
-        RuleFor(x => x.Username).NotEmpty().MaximumLength(256);
+        RuleFor(x => x.Fullname).NotEmpty().MaximumLength(256);
+        RuleFor(x => x.Email).EmailAddress().When(x => !string.IsNullOrEmpty(x.Email));
+        RuleFor(x => x.PostalCode).GreaterThan(0).When(x => x.PostalCode.HasValue);
     }
 }
 
@@ -26,11 +28,18 @@ internal class UpdateUserHandler(AuthServiceDbContext context, ITenantGuard tena
         tenantGuard.EnsureCanAccess(user.TenantId);
         userGuard.EnsureCanAccess(user.Id);
 
-        user.Username = command.Username;
+        user.Fullname = command.Fullname;
         user.Status = command.Status;
+        user.Email = command.Email;
+        user.Address = command.Address;
+        user.City = command.City;
+        user.Region = command.Region;
+        user.PostalCode = command.PostalCode;
+        user.Country = command.Country;
+        user.PhoneNumber = command.PhoneNumber;
 
         var adminOrRootAdmin = context.UserRoles
-           .Where(ur => ur.Role.Name == StaticDetail.ROLE_ADMIN || ur.Role.Name == StaticDetail.ROLE_ROOT_ADMIN)
+           .Where(ur => ur.Role.Name == StaticDetail.ROLE_SHOP_OWNER || ur.Role.Name == StaticDetail.ROLE_ROOT_ADMIN)
            .Select(ur => ur.RoleId)
            .ToHashSet();
 

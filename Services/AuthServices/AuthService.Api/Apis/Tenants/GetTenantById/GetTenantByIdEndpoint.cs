@@ -1,6 +1,6 @@
 namespace AuthService.Api.Apis.Tenants.GetTenantById;
 
-public record GetTenantByIdResponse(Guid Id, string Name, string Description, string Address, string City, string? Region, int? PostalCode, string? Country, string? PhoneNumber, Status Status, DateTime CreatedAt, string CreatedBy, DateTime LastModifiedAt, string LastModifiedBy);
+public record GetTenantByIdResponse(Guid Id, string Name, string Description, string? Email, string Address, string City, string? Region, int? PostalCode, string? Country, string? PhoneNumber, Status Status, DateTime CreatedAt, string CreatedBy, DateTime LastModifiedAt, string LastModifiedBy);
 
 public static class GetTenantByIdEndpoint
 {

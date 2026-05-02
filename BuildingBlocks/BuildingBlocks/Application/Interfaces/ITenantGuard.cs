@@ -2,5 +2,5 @@
 
 public interface ITenantGuard
 {
-    void EnsureCanAccess(Guid? resourceTenantId);
+    void EnsureCanAccess(string? resourceTenantId);
 }

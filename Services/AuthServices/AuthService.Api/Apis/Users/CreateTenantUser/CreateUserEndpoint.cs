@@ -1,4 +1,4 @@
-﻿namespace AuthService.Api.Apis.Users.CreateUser;
+﻿namespace AuthService.Api.Apis.Users.CreateTenantUser;
 
 public record CreateUserRequest(
     string Username,

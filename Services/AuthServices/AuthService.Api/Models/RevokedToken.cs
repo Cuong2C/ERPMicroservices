@@ -3,5 +3,5 @@
 public class RevokedToken : AuditableEntity
 {
     public Guid Id { get; set; }
-    public Guid Jti { get; set; }
+    public string Jti { get; set; } = default!;
 }

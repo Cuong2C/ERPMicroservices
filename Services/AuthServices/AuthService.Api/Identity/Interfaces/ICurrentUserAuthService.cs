@@ -2,5 +2,5 @@
 
 public interface ICurrentUserAuthService : ICurrentUser
 {
-    bool IsAdmin { get; }
+    bool IsShopOwner { get; }
 }

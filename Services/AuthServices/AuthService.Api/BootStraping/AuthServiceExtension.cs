@@ -1,5 +1,4 @@
-﻿using AuthService.Api.Identity;
-using AuthService.Api.Identity.Interfaces;
+﻿using AuthService.Api.Apis.OpenIdConnect.JsonWebKeySet;
 using AuthService.Api.Services.JwtServices.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
@@ -52,6 +51,10 @@ public static class AuthServiceExtension
         services.AddScoped<IUserGuard, UserGuard>();
         services.AddScoped<IJwtService, JwtService>();
 
+
+        services.AddSingleton<RsaKeyProvider>();
+        services.AddSingleton<JwksProvider>();
+        services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
 
         return services;
     }
