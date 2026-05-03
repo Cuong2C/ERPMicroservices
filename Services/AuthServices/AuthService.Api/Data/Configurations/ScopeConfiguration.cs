@@ -5,7 +5,13 @@ public class ScopeConfiguration : IEntityTypeConfiguration<Scope>
     public void Configure(EntityTypeBuilder<Scope> builder)
     {
         builder.HasKey(s => s.Id);
-        builder.Property(s => s.Type).IsRequired().HasMaxLength(255);
+        builder.HasOne(s => s.Resource)
+            .WithMany()
+            .HasForeignKey(s => s.ResourceId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex(s => new { s.ResourceId, s.Value }).IsUnique();
+        builder.Property(s => s.ResourceId).IsRequired();
         builder.Property(s => s.Value).IsRequired().HasMaxLength(255);
     }
 }

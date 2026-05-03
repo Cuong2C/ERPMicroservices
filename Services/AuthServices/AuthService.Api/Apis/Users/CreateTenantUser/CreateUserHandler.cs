@@ -61,13 +61,13 @@ public class CreateUserHandler(AuthServiceDbContext context) : IRequestHandler<C
 
         foreach(var scopeDto in command.Scopes)
         {
-            var scope = context.Scopes.FirstOrDefault(s => s.Type == scopeDto.Type && s.Value == scopeDto.Value);
+            var scope = context.Scopes.FirstOrDefault(s => s.ResourceId == scopeDto.ResourceId && s.Value == scopeDto.Value);
             if(scope == null)
             {
-                user.UserScopes.Add(new UserScope { Scope = new Scope { Type = scopeDto.Type, Value = scopeDto.Value } });
+                user.UserScopes.Add(new UserScope { Scope = new Scope { ResourceId = scopeDto.ResourceId, Value = scopeDto.Value } });
             }
             else 
-            { 
+            {
                 user.UserScopes.Add(new UserScope { ScopeId = scope.Id });
             }
         }

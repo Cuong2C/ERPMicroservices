@@ -1,13 +1,13 @@
-﻿using ItemCatalog.Api.Data.Seeds.interfaces;
+using AuthService.Api.Data.Seeds.Interfaces;
 
-namespace ItemCatalog.Api.BootStraping;
+namespace AuthService.Api.BootStraping;
 
 public class DatabaseInitializerExtension
 {
     public static async Task InitializeAsync(WebApplication app)
     {
         using var scope = app.Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ItemCatalogDbContext>();
+        var context = scope.ServiceProvider.GetRequiredService<AuthServiceDbContext>();
 
         await context.Database.MigrateAsync();
 

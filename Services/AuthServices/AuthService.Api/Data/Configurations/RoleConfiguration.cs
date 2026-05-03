@@ -6,6 +6,7 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
     {
         builder.HasKey(r => r.Id);
         builder.Property(r => r.Name).IsRequired().HasMaxLength(200);
+        builder.Property(r => r.Description).IsRequired().HasMaxLength(500);
 
         builder.HasMany(r => r.RolePermissions)
                .WithOne(rc => rc.Role)

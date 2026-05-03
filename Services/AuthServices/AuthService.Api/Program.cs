@@ -6,6 +6,9 @@ builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
+//builder.Environment.IsDevelopment())
+await DatabaseInitializerExtension.InitializeAsync(app);
+
 app.UseAuthServiceApi();
 
 app.Run();

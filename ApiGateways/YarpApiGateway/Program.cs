@@ -1,25 +1,33 @@
 using Microsoft.IdentityModel.Tokens;
+using YarpApiGateway.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
+var authConfig = builder.Configuration
+    .GetSection("Authentication")
+    .Get<JwtValidationOptions>();
+
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = "https://your-auth-service.com";
+        options.Authority = authConfig!.Authority;
+
+        options.RequireHttpsMetadata = authConfig.RequireHttpsMetadata;
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidIssuer = "auth-service",
+            ValidateIssuer = authConfig.ValidateIssuer,
+            ValidIssuer = authConfig.ValidIssuer,
 
-            ValidateAudience = true,
-            ValidAudience = "api",
+            ValidateAudience = authConfig.ValidateAudience,
+            ValidAudience = authConfig.ValidAudience,
 
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.FromMinutes(5)
+            ValidateLifetime = authConfig.ValidateLifetime,
+
+            ClockSkew = TimeSpan.FromSeconds(authConfig.ClockSkewSeconds)
         };
     });
 

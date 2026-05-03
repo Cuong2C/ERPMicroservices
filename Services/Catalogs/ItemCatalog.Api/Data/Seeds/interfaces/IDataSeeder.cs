@@ -1,4 +1,4 @@
-﻿namespace ItemCatalog.Api.Data.Seed.interfaces;
+﻿namespace ItemCatalog.Api.Data.Seeds.interfaces;
 
 public interface IDataSeeder
 {

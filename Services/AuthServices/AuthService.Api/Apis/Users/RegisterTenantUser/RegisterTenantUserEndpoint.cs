@@ -13,7 +13,7 @@ public static class RegisterTenantUserEndpoint
 {
     public static IEndpointRouteBuilder MapRegisterTenantUserEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapPost("/users/register", async (RegisterTenantUserRequest request, ISender sender) =>
+        endpoints.MapPost("/users/register-tenant-user", async (RegisterTenantUserRequest request, ISender sender) =>
         {
             var command = request.Adapt<RegisterTenantUserCommand>();
             var handlerResult = await sender.Send(command);

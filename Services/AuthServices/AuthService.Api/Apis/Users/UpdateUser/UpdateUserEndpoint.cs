@@ -3,7 +3,7 @@ namespace AuthService.Api.Apis.Users.UpdateUser;
 public record UpdateUserRequest(Guid Id, Status Status, string Fullname, string? Email, string? Address, string? City, string? Region, int? PostalCode, string? Country, string? PhoneNumber, IEnumerable<Guid> Roles, IEnumerable<Guid> Claims, IEnumerable<ScopeDto> Scopes);
 public record UpdateUserResponse(Guid Id);
 
-public record ScopeDto(string Type, string Value);
+public record ScopeDto(Guid ResourceId, string Value);
 
 public static class UpdateUserEndpoint
 {

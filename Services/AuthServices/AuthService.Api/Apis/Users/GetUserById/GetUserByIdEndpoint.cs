@@ -1,10 +1,10 @@
 namespace AuthService.Api.Apis.Users.GetUserById;
 
-public record GetUserByIdResponse(Guid Id, string Username, Status Status, bool IsLocked, DateTime? LockoutEnd, int AccessFailedCount, IEnumerable<RoleDto> Roles, IEnumerable<ClaimDto>? Claims, IEnumerable<ScopeDto>? Scopes, DateTime CreatedAt, string CreatedBy, DateTime LastModifiedAt, string LastModifiedBy);
+public record GetUserByIdResponse(Guid Id, string Username, Status Status, string Fullname, string? Email, string? Address, string? City, string? Region, int? PostalCode, string? Country, string? PhoneNumber, bool IsLocked, DateTime? LockoutEnd, int AccessFailedCount, IEnumerable<RoleDto> Roles, IEnumerable<PermissionDto>? Claims, IEnumerable<ScopeDto>? Scopes, DateTime CreatedAt, string CreatedBy, DateTime LastModifiedAt, string LastModifiedBy);
 
 public record RoleDto(Guid Id, string Name);
-public record ClaimDto(Guid Id, string Type, PermissionAction Value);
-public record ScopeDto(Guid Id, string Type, string Value);
+public record PermissionDto(Guid Id, string Type, PermissionAction Value);
+public record ScopeDto(Guid Id, Guid ResourceId, string ResourceName, string Value);
 public static class GetUserByIdEndpoint
 {
     public static IEndpointRouteBuilder MapGetUserByIdEndpoint(this IEndpointRouteBuilder endpoints)

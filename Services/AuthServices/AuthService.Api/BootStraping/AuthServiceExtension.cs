@@ -1,4 +1,6 @@
 ﻿using AuthService.Api.Apis.OpenIdConnect.JsonWebKeySet;
+using AuthService.Api.Data.Seeds;
+using AuthService.Api.Data.Seeds.Interfaces;
 using AuthService.Api.Services.JwtServices.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
@@ -50,6 +52,11 @@ public static class AuthServiceExtension
         services.AddScoped<ITenantGuard, TenantGuard>();
         services.AddScoped<IUserGuard, UserGuard>();
         services.AddScoped<IJwtService, JwtService>();
+
+        services.AddScoped<IDataSeeder, PermissionActionSeeder>();
+        services.AddScoped<IDataSeeder, ResourceSeeder>();
+        services.AddScoped<IDataSeeder, RoleSeeder>();
+        services.AddScoped<IDataSeeder, UserSeeder>();
 
 
         services.AddSingleton<RsaKeyProvider>();

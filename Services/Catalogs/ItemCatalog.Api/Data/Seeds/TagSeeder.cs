@@ -1,6 +1,6 @@
-using ItemCatalog.Api.Data.Seed.interfaces;
+using ItemCatalog.Api.Data.Seeds.interfaces;
 
-namespace ItemCatalog.Api.Data.Seed;
+namespace ItemCatalog.Api.Data.Seeds;
 
 public class TagSeeder(ItemCatalogDbContext context) : IDataSeeder
 {

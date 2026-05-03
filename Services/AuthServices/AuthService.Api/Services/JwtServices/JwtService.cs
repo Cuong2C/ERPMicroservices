@@ -79,7 +79,7 @@ public class JwtService(AuthServiceDbContext context, IOptions<JwtOptions> jwtOp
 
         foreach (var userScope in user.UserScopes)
         {
-            claims.Add(new Claim(StaticDetail.CLAIM_TYPE_SCOPES, $"{userScope.Scope.Type}:{userScope.Scope.Value}"));
+            claims.Add(new Claim(StaticDetail.CLAIM_TYPE_SCOPES, $"{userScope.Scope.ResourceId}:{userScope.Scope.Value}"));
         }
 
         return BuildJwt(claims, accessExpires);

@@ -9,7 +9,7 @@ public record CreateUserRequest(
 );
 
 public record ScopeDto(
-    string Type,
+    Guid ResourceId,
     string Value
 );
 
@@ -19,7 +19,7 @@ public static class CreateUserEndpoint
 {
     public static IEndpointRouteBuilder MapCreateUserEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapPost("/users", async (CreateUserRequest request, ISender sender) =>
+        endpoints.MapPost("/users/tenant-user", async (CreateUserRequest request, ISender sender) =>
         {
             var command = request.Adapt<CreateUserCommand>();
             var handlerResult = await sender.Send(command);

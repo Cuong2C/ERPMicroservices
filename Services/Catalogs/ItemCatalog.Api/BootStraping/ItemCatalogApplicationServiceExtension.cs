@@ -1,7 +1,7 @@
 ﻿using BuildingBlocks.Exceptions.Handler;
 using BuildingBlocks.Infrastructure;
-using ItemCatalog.Api.Data.Seed;
-using ItemCatalog.Api.Data.Seed.interfaces;
+using ItemCatalog.Api.Data.Seeds;
+using ItemCatalog.Api.Data.Seeds.interfaces;
 using ItemCatalog.Api.Identity;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Serilog;
