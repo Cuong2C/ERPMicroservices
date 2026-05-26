@@ -6,9 +6,8 @@ public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
     {
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Type).IsRequired().HasMaxLength(255);
-        builder.Property(c => c.Action).IsRequired().HasMaxLength(255);
 
-        builder.HasOne(c => c.Action)
+        builder.HasOne(c => c.PermissionAction)
                .WithMany()
                .HasForeignKey(c => c.PermissionActionId)
                .OnDelete(DeleteBehavior.Restrict);

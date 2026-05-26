@@ -2,7 +2,7 @@
 
 namespace ItemCatalog.Api.Models;
 
-public class ItemCategory : AuditableEntity
+public class ItemCategory : TenantAuditableEntity
 {
     public Guid ItemId { get; set; }
     public Item Item { get; set; } = default!;

@@ -12,6 +12,7 @@ public class DatabaseInitializerExtension
         await context.Database.MigrateAsync();
 
         var seeders = scope.ServiceProvider.GetServices<IDataSeeder>();
+
         foreach (var seeder in seeders)
         {
             await seeder.SeedAsync();

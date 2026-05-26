@@ -1,12 +1,12 @@
 ﻿namespace AuthService.Api.Models;
 
-public class User : AuditableEntity
+public class User : TenantAuditableEntity
 {
     public Guid Id { get; set; }
     public string Username { get; set; } = default!;
     public string PasswordHash { get; set; } = default!;
     public Status Status { get; set; } = Status.Active;
-    public string Fullname { get; set; } = default!;
+    public string? Fullname { get; set; }
     public string? Email { get; set; }
     public string? Address { get; set; }
     public string? City { get; set; }

@@ -2,7 +2,7 @@
 
 namespace ItemCatalog.Api.Models;
 
-public class ItemSellPrice : AuditableEntity
+public class ItemSellPrice : TenantAuditableEntity
 {
     public Guid Id { get; set; }
     public Guid ItemId { get; set; }

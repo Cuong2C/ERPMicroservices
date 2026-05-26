@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 
-namespace AuthService.Api.Services.JwtServices.Interfaces;
+namespace AuthService.Api.Services.JwtServices;
 
 public class RsaKeyProvider
 {

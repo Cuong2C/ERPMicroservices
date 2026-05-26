@@ -21,11 +21,17 @@ public class RegisterCustomerUserHandler(AuthServiceDbContext context) : IReques
         if(string.IsNullOrEmpty(request.Email) && string.IsNullOrEmpty(request.PhoneNumber)) 
             throw new BadRequestException("Either email or phone number must be provided.");
 
-        var existingEmail = await context.Users.AnyAsync(u => u.Email == request.Email, cancellationToken);
-        if(existingEmail) throw new BadRequestException("Email already exists.");
+        if (!string.IsNullOrEmpty(request.Email))
+        {
+            var existingEmail = await context.Users.AnyAsync(u => u.Email == request.Email, cancellationToken);
+            if (existingEmail) throw new BadRequestException("Email already exists.");
+        }
 
-        var existingPhoneNumber = await context.Users.AnyAsync(u => u.PhoneNumber == request.PhoneNumber, cancellationToken);
-        if(existingPhoneNumber) throw new BadRequestException("Phone number already exists.");
+        if (!string.IsNullOrEmpty(request.PhoneNumber))
+        {
+            var existingPhoneNumber = await context.Users.AnyAsync(u => u.PhoneNumber == request.PhoneNumber, cancellationToken);
+            if (existingPhoneNumber) throw new BadRequestException("Phone number already exists.");
+        }
 
         var existingUser = await context.Users.AnyAsync(u => u.Username == request.Username, cancellationToken);
         if (existingUser) throw new BadRequestException("Username already exists.");

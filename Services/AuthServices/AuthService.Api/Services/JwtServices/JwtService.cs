@@ -154,7 +154,7 @@ public class JwtService(AuthServiceDbContext context, IOptions<JwtOptions> jwtOp
 
         var principal = new JwtSecurityTokenHandler().ValidateToken(token, parameters, out _);
 
-        var jti = principal.FindFirst("jti")!.Value;
+        var jti = principal.FindFirst(JwtRegisteredClaimNames.Jti)!.Value;
         var isRevoked = context.RevokedTokens.Any(rt => rt.Jti.ToString() == jti);
         
         if (isRevoked)

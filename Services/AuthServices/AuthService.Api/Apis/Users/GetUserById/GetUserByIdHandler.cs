@@ -19,7 +19,7 @@ internal class GetUserByIdHandler(AuthServiceDbContext context, ITenantGuard ten
         userGuard.EnsureCanAccess(user.Id);
 
         var roles = user.UserRoles.Select(ur => new RoleDto(ur.RoleId, ur.Role.Name));
-        var claims = user.UserPermissions.Select(uc => new PermissionDto(uc.PermissionId, uc.Permission.Type, uc.Permission.Action));
+        var claims = user.UserPermissions.Select(uc => new PermissionDto(uc.PermissionId, uc.Permission.Type, uc.Permission.PermissionAction));
         var scopes = user.UserScopes.Select(us => new ScopeDto(us.Scope.Id, us.Scope.ResourceId, us.Scope.Resource.Name, us.Scope.Value));
 
         return new GetUserByIdResult(user.Id, user.Username, user.Status, user.Fullname, user.Email, user.Address, user.City, user.Region, user.PostalCode, user.Country, user.PhoneNumber, user.IsLocked, user.LockoutEnd, user.AccessFailedCount, roles, claims, scopes, user.CreatedAt, user.CreatedBy, user.LastModifiedAt, user.LastModifiedBy);

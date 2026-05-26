@@ -32,7 +32,6 @@ public class UserSeeder(AuthServiceDbContext context, IConfiguration configurati
             RoleId = rootAdminRole.Id
         });
 
-
         context.Users.Add(rootAdminUser);
         await context.SaveChangesAsync();
     }

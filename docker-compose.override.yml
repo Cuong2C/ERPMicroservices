@@ -10,6 +10,17 @@ services:
     volumes:
       - itemcatalogdb_data:/var/lib/postgresql
 
+  authservicedb:
+    container_name: authservicedb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=AuthServiceDb
+    ports:
+      - "5434:5432"
+    volumes:
+      - authservicedb_data:/var/lib/postgresql
+
   itemcatalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -21,6 +32,23 @@ services:
     ports:
       - "6050:8080"
       - "6150:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  authservice.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__AuthServiceDb=Server=authservicedb;Port=5432;Database=AuthServiceDb;Username=postgres;Password=postgres;Include Error Detail=true
+    depends_on:
+      - authservicedb
+    ports:
+      - "8080"
+      - "8081"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro

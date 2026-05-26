@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Options;
-using System.Security.Cryptography;
 
 namespace AuthService.Api.Apis.OpenIdConnect.JsonWebKeySet;
 

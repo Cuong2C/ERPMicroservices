@@ -8,7 +8,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Username).IsRequired().HasMaxLength(256);
         builder.Property(u => u.PasswordHash).IsRequired().HasMaxLength(512);
         builder.Property(u => u.Status).IsRequired();
-        builder.Property(u => u.Fullname).IsRequired().HasMaxLength(256);
         builder.Property(u => u.Email).HasMaxLength(256).IsRequired(false);
         builder.HasIndex(u => u.Email).IsUnique();
         builder.Property(u => u.PhoneNumber).HasMaxLength(32).IsRequired(false);

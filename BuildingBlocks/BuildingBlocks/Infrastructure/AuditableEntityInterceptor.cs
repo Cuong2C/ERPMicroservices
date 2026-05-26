@@ -24,16 +24,13 @@ public class AuditableEntityInterceptor(ICurrentUser currentUser) : SaveChangesI
         if (context == null) return;
 
         var userId = currentUser.UserId ?? "system";
-        var tentantId = currentUser.TenantId;
+        var tenantId = currentUser.TenantId;
 
         foreach (var entry in context.ChangeTracker.Entries<AuditableEntity>())
         {
 
             if (entry.State == EntityState.Added)
             {
-                
-                entry.Entity.TenantId = tentantId;
-
                 entry.Entity.CreatedBy = userId;
                 entry.Entity.CreatedAt = DateTime.UtcNow;
             }
@@ -42,6 +39,12 @@ public class AuditableEntityInterceptor(ICurrentUser currentUser) : SaveChangesI
             {
                 entry.Entity.LastModifiedBy = userId;
                 entry.Entity.LastModifiedAt = DateTime.UtcNow;
+            }
+
+            // If the entity is a TenantAuditableEntity and it's being added, set the TenantId
+            if (entry.Entity is TenantAuditableEntity tenantEntity && entry.State == EntityState.Added)
+            {
+                tenantEntity.TenantId = tenantId;
             }
         }
     }

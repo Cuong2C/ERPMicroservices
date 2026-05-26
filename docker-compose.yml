@@ -8,5 +8,15 @@ services:
       context: .
       dockerfile: Services/Catalogs/ItemCatalog.Api/Dockerfile
 
+  authservicedb:
+    image: postgres
+
+  authservice.api:
+    image: ${DOCKER_REGISTRY-}authserviceapi
+    build:
+      context: .
+      dockerfile: Services/AuthServices/AuthService.Api/Dockerfile
+
 volumes:
   itemcatalogdb_data:
+  authservicedb_data:

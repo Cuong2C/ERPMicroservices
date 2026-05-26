@@ -2,7 +2,11 @@
 using AuthService.Api.Data.Seeds;
 using AuthService.Api.Data.Seeds.Interfaces;
 using AuthService.Api.Services.JwtServices.Interfaces;
+using BuildingBlocks.Exceptions.Handler;
+using BuildingBlocks.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 namespace AuthService.Api.BootStraping;
@@ -16,39 +20,21 @@ public static class AuthServiceExtension
             .CreateLogger();
         services.AddSerilog();
 
+        services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+
         var connectionString = configuration.GetConnectionString("Database");
-        services.AddDbContext<AuthServiceDbContext>(options =>
-            options.UseNpgsql(connectionString));
+        services.AddDbContext<AuthServiceDbContext>((sp, options) =>
+        {
+            options.AddInterceptors(sp.GetRequiredService<ISaveChangesInterceptor>());
+            options.UseNpgsql(connectionString);
+        });
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
         services.AddHttpContextAccessor();
-        //services.AddScoped<IJwtService, JwtService>();
-
-        // Configure JWT authentication
-        var jwtSection = configuration.GetSection("Jwt");
-        var secret = jwtSection["Secret"] ?? "change_this_secret_in_production";
-        var key = System.Text.Encoding.UTF8.GetBytes(secret);
-
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtSection["Issuer"],
-                ValidAudience = jwtSection["Audience"],
-                IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(key)
-            };
-        });
 
         services.AddScoped<ICurrentUserAuthService, CurrentUser>();
+        services.AddScoped<ICurrentUser>(sp => sp.GetRequiredService<ICurrentUserAuthService>());
         services.AddScoped<ITenantGuard, TenantGuard>();
         services.AddScoped<IUserGuard, UserGuard>();
         services.AddScoped<IJwtService, JwtService>();
@@ -62,6 +48,29 @@ public static class AuthServiceExtension
         services.AddSingleton<RsaKeyProvider>();
         services.AddSingleton<JwksProvider>();
         services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
+
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = configuration.GetSection("JwtOptions").GetValue<string>("Authority");
+
+                options.RequireHttpsMetadata = false;
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration.GetSection("JwtOptions").GetValue<string>("ValidIssuer"),
+
+                    ValidateAudience = true,
+                    ValidAudience = configuration.GetSection("JwtOptions").GetValue<string>("ValidAudience"),   
+                    ValidateLifetime = true,
+
+                    ClockSkew = TimeSpan.FromSeconds(5)
+                };
+            });
 
         return services;
     }

@@ -11,8 +11,8 @@ internal class DeleteUserHandler(AuthServiceDbContext context, ITenantGuard tena
         if (user == null) throw new NotFoundException("User not found.");
 
         tenantGuard.EnsureCanAccess(user.TenantId);
+        user.Status = Status.Deleted;
 
-        context.Users.Remove(user);
         await context.SaveChangesAsync(cancellationToken);
 
         return new DeleteUserResult(user.Id);

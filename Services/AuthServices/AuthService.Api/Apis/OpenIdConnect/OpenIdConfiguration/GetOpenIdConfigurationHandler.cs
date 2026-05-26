@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AuthService.Api.Apis.OpenIdConnect.OpenIdConfiguration;
 
@@ -28,7 +29,7 @@ public class GetOpenIdConfigurationHandler(IOptions<JwtOptions> jwtOptions, IHtt
             JwksUri: $"{baseUrl}/.well-known/jwks.json",
             ResponseTypesSupported: new List<string>(),
             SubjectTypesSupported: new List<string> { "public" },
-            IdTokenSigningAlgValuesSupported: new List<string> { "RS256" },
+            IdTokenSigningAlgValuesSupported: new List<string> { SecurityAlgorithms.RsaSha256 },
             ScopesSupported: new List<string>(),
             ClaimsSupported: new List<string> { "sub", "iss", "aud", "exp", "iat", "nbf", "jti", "role", "permissions", "scopes" }
         );
