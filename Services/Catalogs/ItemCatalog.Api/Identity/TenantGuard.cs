@@ -7,9 +7,6 @@
             if (currentUser.IsRootAdmin)
                 return;
 
-            if(string.IsNullOrEmpty(currentUser.TenantId))
-                throw new ForbiddenException("Tenant access denied");
-
             if (resourceTenantId == currentUser.TenantId)
                 return;
 

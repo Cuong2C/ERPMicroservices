@@ -38,8 +38,11 @@ public class JwtService(AuthServiceDbContext context, IOptions<JwtOptions> jwtOp
             new (JwtRegisteredClaimNames.UniqueName, user.Username),
             new (JwtRegisteredClaimNames.Jti, refreshJti),
             new (StaticDetail.CLAIM_TYPE_TOKEN_TYPE, StaticDetail.TOKEN_TYPE_REFRESH),
-            new (StaticDetail.CLAIM_TYPE_TENANT_ID, user.TenantId ?? "")
         };
+
+        var tenantId = context.Tenants.Where(t => t.UserId == user.Id).Select(t => t.Id).FirstOrDefault();
+        if (tenantId != Guid.Empty)
+            claims.Add(new Claim(StaticDetail.CLAIM_TYPE_TENANT_ID, tenantId.ToString()));
 
         return BuildJwt(claims, refreshExpires);
     }
@@ -51,9 +54,12 @@ public class JwtService(AuthServiceDbContext context, IOptions<JwtOptions> jwtOp
             new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new (JwtRegisteredClaimNames.UniqueName, user.Username),
             new (JwtRegisteredClaimNames.Jti, accessJti),
-            new (StaticDetail.CLAIM_TYPE_TOKEN_TYPE, StaticDetail.TOKEN_TYPE_ACCESS),
-            new (StaticDetail.CLAIM_TYPE_TENANT_ID, user.TenantId ?? "")
+            new (StaticDetail.CLAIM_TYPE_TOKEN_TYPE, StaticDetail.TOKEN_TYPE_ACCESS)
         };
+
+        var tenantId = context.Tenants.Where(t => t.UserId == user.Id).Select(t => t.Id).FirstOrDefault();
+        if (tenantId != Guid.Empty)
+            claims.Add(new Claim(StaticDetail.CLAIM_TYPE_TENANT_ID, tenantId.ToString()));
 
         var permissions = new HashSet<string>();
 

@@ -1,6 +1,6 @@
 ﻿namespace AuthService.Api.Models;
 
-public class Tenant : TenantAuditableEntity
+public class Tenant : AuditableEntity
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
@@ -13,5 +13,7 @@ public class Tenant : TenantAuditableEntity
     public string? Country { get; set; }
     public string? PhoneNumber { get; set; }
     public Status Status { get; set; } = Status.Active;
+    public Guid UserId { get; set; }
+    public User User { get; set; } = default!;
 
 }

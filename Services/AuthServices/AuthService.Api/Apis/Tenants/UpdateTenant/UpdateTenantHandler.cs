@@ -19,7 +19,7 @@ internal class UpdateTenantHandler(AuthServiceDbContext context, ITenantGuard te
         var tenant = await context.Tenants.FindAsync(new object[] { command.Id }, cancellationToken);
         if (tenant == null) throw new NotFoundException("Tenant not found.");
 
-        tenantGuard.EnsureCanAccess(tenant.TenantId);
+        tenantGuard.EnsureCanAccess(tenant.Id.ToString());
 
         tenant.Name = command.Name;
         tenant.Description = command.Description;

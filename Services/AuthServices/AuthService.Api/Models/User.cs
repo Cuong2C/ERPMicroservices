@@ -1,6 +1,6 @@
 ﻿namespace AuthService.Api.Models;
 
-public class User : TenantAuditableEntity
+public class User : AuditableEntity
 {
     public Guid Id { get; set; }
     public string Username { get; set; } = default!;

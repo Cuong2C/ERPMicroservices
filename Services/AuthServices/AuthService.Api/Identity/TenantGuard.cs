@@ -1,18 +1,17 @@
-﻿namespace AuthService.Api.Identity
+﻿namespace AuthService.Api.Identity;
+
+public class TenantGuard(ICurrentUser currentUser) : ITenantGuard
 {
-    public class TenantGuard(ICurrentUserAuthService currentUser) : ITenantGuard
+    public void EnsureCanAccess(string? resourceTenantId)
     {
-        public void EnsureCanAccess(string? resourceTenantId)
+        if (currentUser.IsRootAdmin)
+            return;
+
+        if (resourceTenantId == currentUser.TenantId)
         {
-            if (currentUser.IsRootAdmin)
-                return;
-
-            if (resourceTenantId == currentUser.TenantId)
-            {
-                return;
-            }
-
-            throw new ForbiddenException("Tenant access denied");
+            return;
         }
+
+        throw new ForbiddenException("Tenant access denied");
     }
 }

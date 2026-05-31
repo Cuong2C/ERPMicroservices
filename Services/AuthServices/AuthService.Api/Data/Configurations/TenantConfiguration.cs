@@ -16,5 +16,7 @@ public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
         builder.Property(t => t.PostalCode).IsRequired(false);
         builder.Property(t => t.Country).HasMaxLength(255).IsRequired(false);
         builder.Property(t => t.PhoneNumber).HasMaxLength(50).IsRequired(false);
+
+        builder.HasOne(t => t.User).WithOne().HasForeignKey<Tenant>(t => t.UserId).IsRequired(false);
     }
 }

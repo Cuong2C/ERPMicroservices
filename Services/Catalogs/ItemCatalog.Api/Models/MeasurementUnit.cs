@@ -2,7 +2,7 @@
 
 namespace ItemCatalog.Api.Models;
 
-public class MeasurementUnit : TenantAuditableEntity
+public class MeasurementUnit : AuditableEntity
 {
     public Guid Id { get; set; }
     public string Code { get; set; } = default!;

@@ -10,7 +10,7 @@ internal class GetTenantByIdHandler(AuthServiceDbContext context, ITenantGuard t
         var tenant = await context.Tenants.FindAsync(new object[] { query.Id }, cancellationToken);
         if (tenant == null) throw new NotFoundException("Tenant not found.");
 
-        tenantGuard.EnsureCanAccess(tenant.TenantId);
+        tenantGuard.EnsureCanAccess(tenant.Id.ToString());
 
         return tenant.Adapt<GetTenantByIdResult>();
     }

@@ -33,8 +33,7 @@ public static class AuthServiceExtension
 
         services.AddHttpContextAccessor();
 
-        services.AddScoped<ICurrentUserAuthService, CurrentUser>();
-        services.AddScoped<ICurrentUser>(sp => sp.GetRequiredService<ICurrentUserAuthService>());
+        services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<ITenantGuard, TenantGuard>();
         services.AddScoped<IUserGuard, UserGuard>();
         services.AddScoped<IJwtService, JwtService>();

@@ -13,7 +13,7 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     }
 }
 
-internal class UpdateUserHandler(AuthServiceDbContext context, ITenantGuard tenantGuard, IUserGuard userGuard) : IRequestHandler<UpdateUserCommand, UpdateUserResult>
+internal class UpdateUserHandler(AuthServiceDbContext context, IUserGuard userGuard) : IRequestHandler<UpdateUserCommand, UpdateUserResult>
 {
     public async Task<UpdateUserResult> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
@@ -25,7 +25,6 @@ internal class UpdateUserHandler(AuthServiceDbContext context, ITenantGuard tena
 
         if (user == null) throw new NotFoundException("User not found.");
 
-        tenantGuard.EnsureCanAccess(user.TenantId);
         userGuard.EnsureCanAccess(user.Id);
 
         user.Fullname = command.Fullname;

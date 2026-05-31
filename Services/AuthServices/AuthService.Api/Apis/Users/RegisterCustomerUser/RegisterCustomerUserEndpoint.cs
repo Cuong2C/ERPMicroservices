@@ -13,7 +13,7 @@ public static class RegisterCustomerUserEndpoint
 {
     public static IEndpointRouteBuilder MapRegisterCustomerUserEndpoint(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapPost("/users/register-customer", async (RegisterCustomerUserRequest request, ISender sender) =>
+        endpoints.MapPost("/users/register", async (RegisterCustomerUserRequest request, ISender sender) =>
         {
             var command = request.Adapt<RegisterCustomerUserCommand>();
             var handlerResult = await sender.Send(command);

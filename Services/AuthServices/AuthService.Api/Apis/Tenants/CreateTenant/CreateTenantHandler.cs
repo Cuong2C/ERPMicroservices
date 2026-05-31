@@ -28,13 +28,15 @@ public class CreateTenantCommandValidator : AbstractValidator<CreateTenantComman
     }
 }
 
-public class CreateTenantHandler(AuthServiceDbContext context) : IRequestHandler<CreateTenantCommand, CreateTenantResult>
+public class CreateTenantHandler(AuthServiceDbContext context, ICurrentUser currentUser) : IRequestHandler<CreateTenantCommand, CreateTenantResult>
 {
     public async Task<CreateTenantResult> Handle(CreateTenantCommand request, CancellationToken cancellationToken)
     {
+        if(await context.Tenants.AnyAsync(t => t.UserId == Guid.Parse(currentUser.UserId!), cancellationToken))
+            throw new BadRequestException($"A tenant of user '{currentUser.UserId}' already exists.");
+
         var tenant = new Tenant
         {
-            Id = Guid.NewGuid(),
             Name = request.Name,
             Description = request.Description,
             Email = request.Email,
@@ -43,10 +45,9 @@ public class CreateTenantHandler(AuthServiceDbContext context) : IRequestHandler
             Region = request.Region,
             PostalCode = request.PostalCode,
             Country = request.Country,
-            PhoneNumber = request.PhoneNumber
+            PhoneNumber = request.PhoneNumber,
+            UserId = Guid.Parse(currentUser.UserId!)
         };
-
-        tenant.TenantId = tenant.Id.ToString();
 
         context.Tenants.Add(tenant);
         await context.SaveChangesAsync();

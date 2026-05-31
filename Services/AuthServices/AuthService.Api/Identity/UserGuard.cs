@@ -1,10 +1,10 @@
 ﻿namespace AuthService.Api.Identity;
 
-public class UserGuard(ICurrentUserAuthService currentUser) : IUserGuard
+public class UserGuard(ICurrentUser currentUser) : IUserGuard
 {
     public void EnsureCanAccess(Guid resourceUserId)
     {
-        if (currentUser.IsRootAdmin || currentUser.IsShopOwner)
+        if (currentUser.IsRootAdmin)
             return;
 
         if (resourceUserId.ToString() == currentUser.UserId)

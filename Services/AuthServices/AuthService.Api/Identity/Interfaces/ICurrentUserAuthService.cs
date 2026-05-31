@@ -1,4 +1,4 @@
-﻿namespace AuthService.Api.Identity.Interfaces;
+namespace AuthService.Api.Identity.Interfaces;
 
 public interface ICurrentUserAuthService : ICurrentUser
 {

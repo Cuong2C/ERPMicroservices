@@ -7,7 +7,7 @@ internal class GetTagByIdHandler(ItemCatalogDbContext context) : IRequestHandler
 {
     public async Task<GetTagByIdResult> Handle(GetTagByIdQuery request, CancellationToken cancellationToken)
     {
-        var tag = await context.Tags.FindAsync(new object[] { request.Id }, cancellationToken);
+        var tag = await context.Tags.FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
 
         if (tag == null)
             throw new NotFoundException("Tag", request.Id);

@@ -44,7 +44,6 @@ public class RegisterTenantUserHandler(AuthServiceDbContext context) : IRequestH
         {
             Username = request.Username,
             PasswordHash = CustomHasher.HashByArgon2(request.Password),
-            TenantId = request.TenantId.ToString(),
             Email = request.Email,  
             PhoneNumber = request.PhoneNumber
         };
