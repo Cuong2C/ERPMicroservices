@@ -17,6 +17,12 @@ services:
       context: .
       dockerfile: Services/AuthServices/AuthService.Api/Dockerfile
 
+  yarpapigateway:
+    image: ${DOCKER_REGISTRY-}yarpapigateway
+    build:
+      context: .
+      dockerfile: ApiGateways/YarpApiGateway/Dockerfile
+
 volumes:
   itemcatalogdb_data:
   authservicedb_data:
