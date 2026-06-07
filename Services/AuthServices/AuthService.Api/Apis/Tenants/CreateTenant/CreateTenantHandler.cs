@@ -49,6 +49,13 @@ public class CreateTenantHandler(AuthServiceDbContext context, ICurrentUser curr
             UserId = Guid.Parse(currentUser.UserId!)
         };
 
+        var user = await context.Users.FindAsync(new object[] { Guid.Parse(currentUser.UserId!) }, cancellationToken);
+        user!.UserRoles.Add(new UserRole
+        {
+            RoleId = context.Roles.First(r => r.Name == StaticDetail.ROLE_SHOP_OWNER).Id,
+            UserId = user.Id
+        });
+
         context.Tenants.Add(tenant);
         await context.SaveChangesAsync();
 

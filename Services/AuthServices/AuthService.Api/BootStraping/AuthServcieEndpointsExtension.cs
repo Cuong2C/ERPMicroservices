@@ -7,13 +7,11 @@ using AuthService.Api.Apis.Tenants.GetTenants;
 using AuthService.Api.Apis.Tenants.UpdateTenant;
 using AuthService.Api.Apis.Tokens.IntrospectToken;
 using AuthService.Api.Apis.Tokens.RefeshToken;
-using AuthService.Api.Apis.Users.CreateTenantUser;
 using AuthService.Api.Apis.Users.DeleteUser;
 using AuthService.Api.Apis.Users.GetUserById;
 using AuthService.Api.Apis.Users.GetUsers;
 using AuthService.Api.Apis.Users.Login;
 using AuthService.Api.Apis.Users.RegisterCustomerUser;
-using AuthService.Api.Apis.Users.RegisterTenantUser;
 using AuthService.Api.Apis.Users.UpdateUser;
 
 namespace AuthService.Api.BootStraping;
@@ -38,13 +36,11 @@ public static class AuthServcieEndpointsExtension
         endpoints.MapRefeshTokenEndpoint();
 
         // User endpoints
-        endpoints.MapCreateUserEndpoint();
         endpoints.MapGetUsersEndpoint();
         endpoints.MapGetUserByIdEndpoint();
         endpoints.MapUpdateUserEndpoint();
         endpoints.MapDeleteUserEndpoint();
         endpoints.MapLoginEndpoint();
-        endpoints.MapRegisterTenantUserEndpoint();
         endpoints.MapRegisterCustomerUserEndpoint();
 
         return endpoints;
